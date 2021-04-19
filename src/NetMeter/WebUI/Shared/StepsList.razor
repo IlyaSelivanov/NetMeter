@@ -1,0 +1,19 @@
+﻿@inject IStepRepository stepRepository
+
+<div>
+    <GenericList Items="Steps">
+        <ElementTemplate Context="step">
+            <IndividualStep Step="step" OnDelete="DeleteStep"></IndividualStep>
+        </ElementTemplate>
+    </GenericList>
+</div>
+
+@code {
+    [Parameter] public List<Step> Steps { get; set; }
+
+    private void DeleteStep(Step step)
+    {
+        Steps.Remove(step);
+        stepRepository.DeleteStep(step.Id);
+    }
+}

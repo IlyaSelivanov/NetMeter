@@ -1,0 +1,19 @@
+﻿@inject IPlanRepository planRepository
+
+<div>
+    <GenericList Items="Plans">
+        <ElementTemplate Context="plan">
+            <IndividualPlan Plan="plan" DeleteEvent="DeletePlan"></IndividualPlan>
+        </ElementTemplate>
+    </GenericList>
+</div>
+
+@code {
+    [Parameter] public List<Plan> Plans { get; set; }
+
+    private async Task DeletePlan(Plan plan)
+    {
+        Plans.Remove(plan);
+        await planRepository.DeletePlan(plan.Id);
+    }
+}

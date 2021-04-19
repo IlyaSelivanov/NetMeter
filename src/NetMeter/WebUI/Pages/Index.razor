@@ -1,0 +1,15 @@
+﻿@page "/"
+@inject IPlanRepository planRepository
+
+<a href="plan/create" class="btn btn-info">Create New Plan</a>
+<PlansList Plans="plans"></PlansList>
+
+@code
+{
+    private List<Plan> plans;
+
+    protected override async Task OnInitializedAsync()
+    {
+        plans = await planRepository.GetPlans();
+    }
+}

@@ -1,0 +1,29 @@
+﻿<div class="d-flex flex-row">
+    <div class="mr-auto p-2">
+        @Step.Name
+    </div>
+    <div class="mr-auto p-2">
+        @Step.Resource
+    </div>
+    <div class="mr-auto p-2">
+        @Step.Method
+    </div>
+    <div class="p-2">
+        <a class="btn btn-info" href="@editUrl">Edit</a>
+    </div>
+    <div class="p-2">
+        <button class="btn-warning" @onclick="@(() => OnDelete.InvokeAsync(Step))">Delete</button>
+    </div>
+</div>
+
+@code {
+    private string editUrl;
+
+    [Parameter] public Step Step { get; set; }
+    [Parameter] public EventCallback<Step> OnDelete { get; set; }
+
+    protected override void OnInitialized()
+    {
+        editUrl = $"/plan/settings/{Step.PlanId}/step/edit/{Step.Id}";
+    }
+}

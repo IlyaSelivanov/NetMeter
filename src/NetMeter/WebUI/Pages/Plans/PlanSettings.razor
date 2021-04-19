@@ -1,0 +1,39 @@
+﻿@page "/plan/settings/{PlanId:int}"
+@inject IPlanRepository planRepository
+@inject IStepRepository stepRepository
+@inject HttpClient httpClient
+@using System.Text.Json;
+@using System.Text;
+
+<h3>Plan Settings</h3>
+<div class="d-flex flex-column">
+    <div class="mb-auto p-2 bd-highlight">@plan.Name</div>
+    <div class="p-2 bd-highlight">@plan.EndpointUrl</div>
+    <div class="p-2 bd-highlight">@plan.UsersNumber user(s)</div>
+</div>
+
+<button class="btn-primary" @onclick="@RunPlan">Run</button>
+
+<a href="@createStepUrl" class="btn btn-info">Create New Step</a>
+
+<StepsList Steps="plan.Steps"></StepsList>
+
+@code {
+    private string createStepUrl;
+    private Plan plan = new Plan();
+
+    [Parameter] public int PlanId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        plan = await planRepository.GetPlanById(PlanId);
+        createStepUrl = $"/plan/settings/{PlanId}/step/create";
+    }
+
+    private async Task RunPlan()
+    {
+        var dataJson = JsonSerializer.Serialize(plan);
+        var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("/api/executor", stringContent);
+    }
+}

@@ -1,0 +1,29 @@
+﻿@page "/plan/settings/{PlanId:int}/step/create"
+@inject IPlanRepository planRepository
+@inject IStepRepository stepRepository
+@inject NavigationManager navManager
+
+<StepForm Step="step" OnValidSubmit="SaveStep"></StepForm>
+
+@code {
+    private Plan plan = new Plan();
+    private Step step = new Step();
+
+    [Parameter] public int PlanId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        plan = await planRepository.GetPlanById(PlanId);
+    }
+
+    private async Task SaveStep()
+    {
+        plan.Steps.Add(step);
+        step.PlanId = plan.Id;
+
+        await planRepository.UpdatePlan(plan);
+        await stepRepository.CreateStep(step);
+
+        navManager.NavigateTo($"/plan/settings/{PlanId}");
+    }
+}

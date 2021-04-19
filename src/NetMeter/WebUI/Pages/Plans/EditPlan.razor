@@ -1,0 +1,24 @@
+﻿@page "/plan/edit/{PlanId:int}"
+@inject NavigationManager navManager
+@inject IPlanRepository planRepository
+
+<h3>Edit Plan</h3>
+
+<PlanForm Plan="plan" OnValidSubmit="SavePlan"></PlanForm>
+
+@code {
+    private Plan plan = new Plan();
+
+    [Parameter] public int PlanId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        plan = await planRepository.GetPlanById(PlanId);
+    }
+
+    private async Task SavePlan()
+    {
+        await planRepository.UpdatePlan(plan);
+        navManager.NavigateTo("/");
+    }
+}

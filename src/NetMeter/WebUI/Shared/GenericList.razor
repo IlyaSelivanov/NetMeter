@@ -1,0 +1,38 @@
+﻿@typeparam TItem
+
+@if (Items == null)
+{
+    if (NullTemplate != null)
+    {
+        @NullTemplate
+    }
+    else
+    {
+        <p>No collection</p>
+    }
+}
+else if (Items.Count == 0)
+{
+    if (EmptyTemplate != null)
+    {
+        @EmptyTemplate
+    }
+    else
+    {
+        <p>Empty collection</p>
+    }
+}
+else
+{
+    foreach (var item in Items)
+    {
+        @ElementTemplate(item)
+    }
+}
+
+@code {
+    [Parameter] public List<TItem> Items { get; set; }
+    [Parameter] public RenderFragment NullTemplate { get; set; }
+    [Parameter] public RenderFragment EmptyTemplate { get; set; }
+    [Parameter] public RenderFragment<TItem> ElementTemplate { get; set; }
+}

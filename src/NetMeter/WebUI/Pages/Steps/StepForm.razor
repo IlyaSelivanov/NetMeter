@@ -1,0 +1,33 @@
+﻿<EditForm Model="@Step" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <div class="form-group">
+        <label>
+            Name: <InputText @bind-Value="Step.Name"></InputText>
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            Resource: <InputText @bind-Value="Step.Resource"></InputText>
+        </label>
+    </div>
+    <div class="form-group">
+        <label> Method: </label>
+        <div>
+            <InputSelect @bind-Value="Step.Method">
+                <option value=""></option>
+                <option value="0">GET</option>
+                <option value="1">POST</option>
+                <option value="2">PUT</option>
+                <option value="3">DELETE</option>
+            </InputSelect>
+        </div>
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    [Parameter] public Step Step { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

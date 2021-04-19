@@ -1,0 +1,17 @@
+﻿@page "/plan/create"
+@inject NavigationManager navManager
+@inject IPlanRepository planRepository 
+
+<h3>Create Plan</h3>
+
+<PlanForm Plan="plan" OnValidSubmit="SavePlan"></PlanForm>
+
+@code {
+    private Plan plan = new Plan();
+
+    private async Task SavePlan()
+    {
+        await planRepository.CreatePlan(plan);
+        navManager.NavigateTo("/");
+    }
+}

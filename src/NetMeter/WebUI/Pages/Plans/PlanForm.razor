@@ -1,0 +1,26 @@
+﻿<EditForm Model="@Plan" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <div class="form-group">
+        <label>
+            Name: <InputText @bind-Value="Plan.Name"></InputText>
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            Url: <InputText @bind-Value="Plan.EndpointUrl"></InputText>
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            User(s): <InputNumber @bind-Value="Plan.UsersNumber"></InputNumber>
+        </label>
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    [Parameter] public Plan Plan { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

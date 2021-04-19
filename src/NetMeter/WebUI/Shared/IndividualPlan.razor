@@ -1,0 +1,28 @@
+﻿<div class="d-flex flex-row">
+    <div class="mr-auto p-2">
+        @Plan.Name
+    </div>
+    <div class="p-2">
+        <a class="btn btn-info" href="@editUrl">Edit</a>
+    </div>
+    <div class="p-2">
+        <a class="btn btn-info" href="@settingsUrl">Settings</a>
+    </div>
+    <div class="p-2">
+        <button class="btn-warning" @onclick="@(() => DeleteEvent.InvokeAsync(Plan))">Delete</button>
+    </div>
+</div>
+
+@code {
+    private string editUrl;
+    private string settingsUrl;
+
+    [Parameter] public Plan Plan { get; set; }
+    [Parameter] public EventCallback<Plan> DeleteEvent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        editUrl = $"plan/edit/{Plan.Id}";
+        settingsUrl = $"plan/settings/{Plan.Id}";
+    }
+}
