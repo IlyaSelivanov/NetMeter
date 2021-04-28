@@ -7,6 +7,8 @@ namespace Application.Context
     {
         public DbSet<Plan> Plans { get; set; }
         public DbSet<Step> Steps { get; set; }
+        public DbSet<Result> Results { get; set; }
+        public DbSet<Execution> Executions { get; set; }
 
         public EfDbContext(DbContextOptions options) : base(options)
         {

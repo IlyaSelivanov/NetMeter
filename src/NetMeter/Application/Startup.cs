@@ -1,5 +1,6 @@
 using Application.Context;
 using Application.Repository;
+using Application.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,15 +37,20 @@ namespace Application
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            string connString = Configuration.GetConnectionString("DomainDatabase");
+            IConnectionStringProvider connectionStringProvider = new ConnectionStringProvider(Configuration);
+            string connString = connectionStringProvider.GetConnectionString("DomainDatabase");
+            //string connString = Configuration.GetConnectionString("DomainDatabase");
             services.AddDbContext<EfDbContext>(options =>
             {
                 options.UseSqlServer(connString);
             });
 
             services.AddScoped<EfDbContext>();
+            services.AddScoped<ExecutorService>();
             services.AddScoped<IPlanRepository, EfPlanRepository>();
             services.AddScoped<IStepRepository, EfStepRepository>();
+            services.AddScoped<IResultRepository, EfResultRepository>();
+            services.AddScoped<IExecutionRepository, EfExecutionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

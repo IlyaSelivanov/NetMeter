@@ -28,6 +28,7 @@ namespace WebUI
             services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IStepRepository, StepRepository>();
+            services.AddScoped<IExecutionRepository, ExecutionRepository>();
         }
     }
 }

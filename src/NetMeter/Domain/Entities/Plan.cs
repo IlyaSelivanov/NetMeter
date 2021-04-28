@@ -17,6 +17,10 @@ namespace Domain.Entities
         [Range(1, 100, ErrorMessage = "Users number invalid (1-100).")]
         public int UsersNumber { get; set; } = 1;
 
+        public bool IsLooped { get; set; } = false;
+        public int Duration { get; set; } = 0;
+
         public List<Step> Steps { get; set; } = new List<Step>();
+        public List<Execution> Executions { get; set; } = new List<Execution>();
     }
 }

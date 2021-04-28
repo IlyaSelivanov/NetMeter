@@ -1,9 +1,10 @@
 ﻿using Application.Helpers;
+using Application.Repository;
 using Domain.Entities;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Application.Services
@@ -11,14 +12,27 @@ namespace Application.Services
     public class VirtualUser
     {
         private Plan _plan;
-        private RestClient _restClient;
-        List<RestRequest> _requests;
+        private Execution _execution;
+        private readonly IExecutionRepository _executionRepository;
+        private readonly IResultRepository _resultRepository;
 
-        public VirtualUser(Plan plan)
+        private RestClient _restClient;
+        private List<UserRequest> _requests;
+        private List<Result> _results;
+
+        public VirtualUser(Plan plan, 
+            Execution execution, 
+            IExecutionRepository executionRepository, 
+            IResultRepository resultRepository)
         {
             _plan = plan;
-            _requests = new List<RestRequest>();
+            _execution = execution;
+            _executionRepository = executionRepository;
+            _resultRepository = resultRepository;
+
+            _requests = new List<UserRequest>();
             _restClient = new RestClient(_plan.EndpointUrl);
+            _results = new List<Result>();
         }
 
         public void CreateRequests()
@@ -37,12 +51,34 @@ namespace Application.Services
 
             foreach (var request in _requests)
             {
-                var response =  await _restClient.ExecuteAsync(request);
-                Console.WriteLine(response.Content);
+                var watch = new Stopwatch();
+
+                watch.Start();
+                var response =  await _restClient.ExecuteAsync(request.RestRequest);
+                watch.Stop();
+
+                Console.WriteLine((int)response.StatusCode);
+
+                Result r = new Result();
+                r.RequestResource = request.RequestResource;
+                r.StatusCode = (int)response.StatusCode;
+                r.ResponseBody = response.Content;
+                r.ResponseTime = watch.ElapsedMilliseconds;
+                r.ExecutionId = _execution.Id;
+
+                _results.Add(r);                
             }
         }
 
-        private RestRequest CreateRequest(Step step)
+        public async Task SaveResults()
+        {
+            await _resultRepository.CreateResults(_results);
+
+            _execution.Results.AddRange(_results);
+            await _executionRepository.UpdateExecution(_execution);
+        }
+
+        private UserRequest CreateRequest(Step step)
         {
             RestRequest request = new RequestBuilder()
                 .Resource(step.Resource)
@@ -52,8 +88,7 @@ namespace Application.Services
                 .Body(step.Body)
                 .Build();
 
-            return request;
-            
+            return new UserRequest { RestRequest = request, RequestResource = step.Resource };
         }
     }
 }

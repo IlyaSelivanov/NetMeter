@@ -1,6 +1,7 @@
 ﻿@page "/plan/settings/{PlanId:int}"
 @inject IPlanRepository planRepository
 @inject IStepRepository stepRepository
+@inject IExecutionRepository executionRepository
 @inject HttpClient httpClient
 @using System.Text.Json;
 @using System.Text;
@@ -32,8 +33,19 @@
 
     private async Task RunPlan()
     {
-        var dataJson = JsonSerializer.Serialize(plan);
-        var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
-        await httpClient.PostAsync("/api/executor", stringContent);
+        //var dataJson = JsonSerializer.Serialize(plan);
+        //var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
+        //await httpClient.PostAsync("/api/executor", stringContent);
+
+        Execution execution = new Execution();
+        execution.StartTime = DateTime.Now;
+        execution.Status = (int)ExecutionStatus.Running;
+        execution.PlanId = plan.Id;
+        //execution.Plan = plan;
+
+        plan.Executions.Add(execution);
+        await planRepository.UpdatePlan(plan);
+
+        await executionRepository.CreateExecution(execution);
     }
 }

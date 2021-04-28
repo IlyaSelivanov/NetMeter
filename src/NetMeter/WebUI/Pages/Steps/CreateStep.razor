@@ -1,4 +1,4 @@
-﻿@page "/plan/settings/{PlanId:int}/step/edit/{StepId:int}"
+﻿@page "/plan/settings/{PlanId:int}/step/create"
 @inject IPlanRepository planRepository
 @inject IStepRepository stepRepository
 @inject NavigationManager navManager
@@ -6,19 +6,23 @@
 <StepForm Step="step" OnValidSubmit="SaveStep"></StepForm>
 
 @code {
+    private Plan plan = new Plan();
     private Step step = new Step();
 
     [Parameter] public int PlanId { get; set; }
-    [Parameter] public int StepId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        step = await stepRepository.GetStepById(StepId);
+        plan = await planRepository.GetPlanById(PlanId);
     }
 
     private async Task SaveStep()
     {
-        await stepRepository.UpdateStep(step);
+        plan.Steps.Add(step);
+        step.PlanId = plan.Id;
+
+        await planRepository.UpdatePlan(plan);
+        await stepRepository.CreateStep(step);
 
         navManager.NavigateTo($"/plan/settings/{PlanId}");
     }

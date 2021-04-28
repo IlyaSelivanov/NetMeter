@@ -17,6 +17,18 @@
             User(s): <InputNumber @bind-Value="Plan.UsersNumber"></InputNumber>
         </label>
     </div>
+    <div class="form-group">
+        <label>
+            Looped: <InputCheckbox @bind-Value="Plan.IsLooped"></InputCheckbox>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Duration: <InputNumber @bind-Value="Plan.Duration"></InputNumber>
+        </label>
+    </div>
+
     <button type="submit">Submit</button>
 </EditForm>
 
