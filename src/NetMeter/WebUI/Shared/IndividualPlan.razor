@@ -31,7 +31,7 @@
     <td>@(@Plan.IsLooped ? "Looped" : "Not Looped")</td>
     <td>@Plan.Duration</td>
     <td>
-        <button class="btn-primary">Results</button>
+        <button class="btn btn-primary">Results</button>
         <a class="btn btn-info" href="@settingsUrl">Settings</a>
         <button class="btn btn-danger" @onclick="@(() => DeleteEvent.InvokeAsync(Plan))">Delete</button>
     </td>
