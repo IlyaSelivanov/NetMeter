@@ -8,7 +8,8 @@ namespace Application.Repository
     {
         Task CreateExecution(Execution execution);
         Task DeleteExecution(int id);
-        Task<List<Execution>> GetExecutionsByPlanId(int planId);
+        Task<Execution> GetExecutionById(int id);
+        Task<List<Execution>> GetExecutions();
         Task UpdateExecution(Execution execution);
     }
 }

@@ -33,10 +33,6 @@
 
     private async Task RunPlan()
     {
-        //var dataJson = JsonSerializer.Serialize(plan);
-        //var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
-        //await httpClient.PostAsync("/api/executor", stringContent);
-
         Execution execution = new Execution();
         execution.StartTime = DateTime.Now;
         execution.Status = (int)ExecutionStatus.Running;

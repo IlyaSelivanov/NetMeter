@@ -2,7 +2,7 @@
 {
     public enum ExecutionStatus
     {
-        Ready = 0,
+        Completed = 0,
         Running,
         Aborted
     }

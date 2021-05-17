@@ -1,5 +1,6 @@
 ﻿using Application.Repository;
 using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -83,6 +84,10 @@ namespace Application.Services
 
             foreach (var user in _users)
                 await user.SaveResults();
+
+            _execution.Status = (int)ExecutionStatus.Completed;
+            _execution.EndTime = DateTime.Now;
+            await _executionRepository.UpdateExecution(_execution);
         }
     }
 }

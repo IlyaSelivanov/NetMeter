@@ -17,13 +17,20 @@ namespace Application.Repository
             _db = db;
         }
 
-        public async Task<List<Execution>> GetExecutionsByPlanId(int planId)
+        public async Task<List<Execution>> GetExecutions()
+        {
+            return await _db.Executions
+                .Include(e => e.Plan)
+                .ToListAsync();
+        }
+
+        public async Task<Execution> GetExecutionById(int id)
         {
             return await _db.Executions
                 .Include(e => e.Plan)
                 .Include(e => e.Results)
-                .Where(e => e.PlanId == planId)
-                .ToListAsync();
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task CreateExecution(Execution execution)

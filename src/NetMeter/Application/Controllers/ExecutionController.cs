@@ -2,6 +2,7 @@
 using Application.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Application.Controllers
@@ -21,7 +22,6 @@ namespace Application.Controllers
             _executorService = executorService;
         }
 
-        // POST api/<ExecutionController>
         [HttpPost]
         public async Task<ActionResult> Post(Execution execution)
         {
@@ -32,6 +32,23 @@ namespace Application.Controllers
             await _executorService.Execute();
 
             return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Execution>>> Get()
+        {
+            return await _executionRepository.GetExecutions();
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<Execution>> Get(int id)
+        {
+            var execution = await _executionRepository.GetExecutionById(id);
+
+            if (execution == null)
+                return NotFound();
+
+            return execution;
         }
     }
 }

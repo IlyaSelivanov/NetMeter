@@ -24,7 +24,11 @@ namespace Application.Repository
 
         public async Task<Plan> GetPlanById(int id)
         {
-            return await _db.Plans.Include(p => p.Steps).Where(p => p.Id == id).FirstOrDefaultAsync();
+            return await _db.Plans
+                .Include(p => p.Steps)
+                .Include(p => p.Executions)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task CreatePlan(Plan plan)

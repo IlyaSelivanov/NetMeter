@@ -1,28 +1,4 @@
-﻿@*<div class="d-flex flex-row">
-    <div class="mr-auto p-2">
-        <a class="nav-link" href="@editUrl">@Plan.Name</a>
-    </div>
-    <div class="mr-auto p-2">
-        <p>@Plan.EndpointUrl</p>
-    </div>
-    <div class="mr-auto p-2">
-        <p>@Plan.UsersNumber</p>
-    </div>
-    <div class="mr-auto p-2">
-        <p>@Plan.Duration</p>
-    </div>
-    <div class="p-2">
-        <a class="btn btn-info" href="@editUrl">Edit</a>
-    </div>
-    <div class="p-2">
-        <a class="btn btn-info" href="@settingsUrl">Settings</a>
-    </div>
-    <div class="p-2">
-        <button class="btn-warning" @onclick="@(() => DeleteEvent.InvokeAsync(Plan))">Delete</button>
-    </div>
-</div>*@
-
-<tr>
+﻿<tr>
     <th scope="row">
         <a class="nav-link" href="@editUrl">@Plan.Name</a>
     </th>
@@ -31,7 +7,7 @@
     <td>@(@Plan.IsLooped ? "Looped" : "Not Looped")</td>
     <td>@Plan.Duration</td>
     <td>
-        <button class="btn btn-primary">Results</button>
+        <a class="btn btn-primary" href="@executionsUrl">Executions</a>
         <a class="btn btn-info" href="@settingsUrl">Settings</a>
         <button class="btn btn-danger" @onclick="@(() => DeleteEvent.InvokeAsync(Plan))">Delete</button>
     </td>
@@ -40,6 +16,7 @@
 @code {
     private string editUrl;
     private string settingsUrl;
+    private string executionsUrl;
 
     [Parameter] public Plan Plan { get; set; }
     [Parameter] public EventCallback<Plan> DeleteEvent { get; set; }
@@ -48,5 +25,6 @@
     {
         editUrl = $"plan/edit/{Plan.Id}";
         settingsUrl = $"plan/settings/{Plan.Id}";
+        executionsUrl = $"plan/executions/{Plan.Id}";
     }
 }

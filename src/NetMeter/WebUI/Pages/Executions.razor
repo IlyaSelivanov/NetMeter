@@ -1,0 +1,18 @@
+﻿@page "/plan/executions/{PlanId:int}"
+@inject IExecutionRepository executionsRepository
+
+<h3>Executions</h3>
+
+@code {
+    private List<Execution> executions = new List<Execution>();
+
+    [Parameter] public int PlanId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var execs = await executionsRepository.GetPlanExecutions(PlanId);
+
+        if (execs != null && execs.Count() > 0)
+            executions.AddRange(execs);
+    }
+}
