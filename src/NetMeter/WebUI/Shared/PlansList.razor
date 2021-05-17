@@ -1,11 +1,25 @@
 ﻿@inject IPlanRepository planRepository
 
 <div>
-    <GenericList Items="Plans">
-        <ElementTemplate Context="plan">
-            <IndividualPlan Plan="plan" DeleteEvent="DeletePlan"></IndividualPlan>
-        </ElementTemplate>
-    </GenericList>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Endpoint</th>
+                <th scope="col">Users Number</th>
+                <th scope="col">Is Looped</th>
+                <th scope="col">Duration (ms)</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <GenericList Items="Plans">
+                <ElementTemplate Context="plan">
+                    <IndividualPlan Plan="plan" DeleteEvent="DeletePlan"></IndividualPlan>
+                </ElementTemplate>
+            </GenericList>
+        </tbody>
+    </table>
 </div>
 
 @code {

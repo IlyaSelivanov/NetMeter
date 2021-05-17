@@ -37,14 +37,9 @@ namespace Application
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            IConnectionStringProvider connectionStringProvider = new ConnectionStringProvider(Configuration);
-            string connString = connectionStringProvider.GetConnectionString("DomainDatabase");
-            //string connString = Configuration.GetConnectionString("DomainDatabase");
-            services.AddDbContext<EfDbContext>(options =>
-            {
-                options.UseSqlServer(connString);
-            });
+            services.AddDbContext<EfDbContext>();
 
+            services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
             services.AddScoped<EfDbContext>();
             services.AddScoped<ExecutorService>();
             services.AddScoped<IPlanRepository, EfPlanRepository>();

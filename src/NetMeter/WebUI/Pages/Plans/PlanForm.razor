@@ -4,32 +4,32 @@
 
     <div class="form-group">
         <label>
-            Name: <InputText @bind-Value="Plan.Name"></InputText>
+            Name: <InputText class="form-control" @bind-Value="Plan.Name"></InputText>
         </label>
     </div>
     <div class="form-group">
         <label>
-            Url: <InputText @bind-Value="Plan.EndpointUrl"></InputText>
+            Url: <InputText class="form-control" @bind-Value="Plan.EndpointUrl"></InputText>
         </label>
     </div>
     <div class="form-group">
         <label>
-            User(s): <InputNumber @bind-Value="Plan.UsersNumber"></InputNumber>
+            User(s): <InputNumber class="form-control" @bind-Value="Plan.UsersNumber"></InputNumber>
         </label>
     </div>
     <div class="form-group">
         <label>
-            Looped: <InputCheckbox @bind-Value="Plan.IsLooped"></InputCheckbox>
+            Looped: <InputCheckbox class="form-check-label" @bind-Value="Plan.IsLooped"></InputCheckbox>
         </label>
     </div>
 
     <div class="form-group">
         <label>
-            Duration: <InputNumber @bind-Value="Plan.Duration"></InputNumber>
+            Duration: <InputNumber class="form-control" @bind-Value="Plan.Duration"></InputNumber>
         </label>
     </div>
 
-    <button type="submit">Submit</button>
+    <button class="btn btn-primary" type="submit">Submit</button>
 </EditForm>
 
 @code {
