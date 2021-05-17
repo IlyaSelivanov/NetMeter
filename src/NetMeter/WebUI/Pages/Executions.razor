@@ -1,7 +1,8 @@
-﻿@page "/plan/executions/{PlanId:int}"
+﻿@page "/plan/{PlanId:int}/executions"
 @inject IExecutionRepository executionsRepository
 
 <h3>Executions</h3>
+<ExecutionsList Executions="executions"></ExecutionsList>
 
 @code {
     private List<Execution> executions = new List<Execution>();

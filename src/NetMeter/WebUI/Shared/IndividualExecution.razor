@@ -3,7 +3,7 @@
         <p>Started: @Execution.StartTime</p>
     </div>
     <div class="mr-auto p-2">
-        <p>Status: @Execution.Status</p>
+        <p>Status: @status</p>
     </div>
     <div class="p-2">
         <a class="btn btn-info" href="@detailsUrl">Details</a>
@@ -11,7 +11,32 @@
 </div>
 
     @code {
-        private string detailsUrl = "";
+        private string detailsUrl;
+        private string status;
 
         [Parameter] public Execution Execution { get; set; }
+
+        protected override void OnInitialized()
+        {
+            detailsUrl = $"/plan/{Execution.PlanId}/execution/{Execution.Id}";
+            GetStatusName();
+        }
+
+        private void GetStatusName()
+        {
+            switch(Execution.Status)
+            {
+                case 0:
+                    status = "Completed";
+                    break;
+                case 1:
+                    status = "Running";
+                    break;
+                case 2:
+                    status = "Aborted";
+                    break;
+                default:
+                    break;
+            }
+        }
     }

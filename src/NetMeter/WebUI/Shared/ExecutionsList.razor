@@ -1,0 +1,11 @@
+﻿<div>
+    <GenericList Items="Executions">
+        <ElementTemplate Context="execution">
+            <IndividualExecution Execution="execution"></IndividualExecution>
+        </ElementTemplate>
+    </GenericList>
+</div>
+
+@code {
+    [Parameter] public List<Execution> Executions { get; set; }
+}
