@@ -40,7 +40,7 @@ namespace Application.Controllers
             return await _executionRepository.GetExecutions();
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Execution>> Get(int id)
         {
             var execution = await _executionRepository.GetExecutionById(id);

@@ -1,0 +1,45 @@
+﻿@page "/plan/{PlanId:int}/execution/{ExecutionId:int}"
+@inject IExecutionRepository executionRepository
+
+<h3>ExecutionDetails</h3>
+@if (execution == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Requests number: @execution.Results.Count</p>
+}
+
+@if (responseGroups == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var item in responseGroups)
+    {
+        <p>Status @item.Name: @item.Count</p>
+        <p>Average Duration: @item.Average, ms</p>
+    }
+}
+
+@code {
+    private Execution execution;
+    private List<dynamic> responseGroups;
+
+    [Parameter] public int PlanId { get; set; }
+    [Parameter] public int ExecutionId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        execution = await executionRepository.GetExecutionById(ExecutionId);
+        responseGroups = execution.Results.GroupBy(r => r.StatusCode)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = g.Count(),
+                Average = g.Average(r => r.ResponseTime)
+            }).ToList<dynamic>();
+    }
+}

@@ -30,5 +30,11 @@ namespace WebUI.Repository
             var response = await _httpService.Get<IEnumerable<Execution>>(url);
             return response.Response.Where(e => e.PlanId == planId);
         }
+
+        public async Task<Execution> GetExecutionById(int id)
+        {
+            var response = await _httpService.Get<Execution>($"{url}/{id}");
+            return response.Response;
+        }
     }
 }
