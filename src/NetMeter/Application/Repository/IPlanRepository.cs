@@ -9,7 +9,7 @@ namespace Application.Repository
         Task CreatePlan(Plan plan);
         Task DeletePlan(int id);
         Task<Plan> GetPlanById(int id);
-        Task<List<Plan>> GetPlans();
+        Task<IEnumerable<Plan>> GetPlans();
         Task UpdatePlan(Plan plan);
     }
 }

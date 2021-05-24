@@ -9,7 +9,7 @@ namespace Application.Repository
         Task CreateExecution(Execution execution);
         Task DeleteExecution(int id);
         Task<Execution> GetExecutionById(int id);
-        Task<List<Execution>> GetExecutions();
+        Task<IEnumerable<Execution>> GetExecutions();
         Task UpdateExecution(Execution execution);
     }
 }

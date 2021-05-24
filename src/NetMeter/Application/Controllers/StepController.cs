@@ -22,34 +22,34 @@ namespace Application.Controllers
 
         // GET: api/<StepController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Step>>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _repository.GetSteps();
+            return Ok(await _repository.GetSteps());
         }
 
         // GET api/<StepController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Step>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var step = await _repository.GetStepById(id);
 
             if (step == null)
                 return NotFound();
 
-            return step;
+            return Ok(step);
         }
 
         // POST api/<StepController>
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Step step)
+        public async Task<IActionResult> Post(Step step)
         {
             await _repository.CreateStep(step);
-            return step.Id;
+            return Ok(step.Id);
         }
 
         // PUT api/<StepController>
         [HttpPut]
-        public async Task<ActionResult> Put(Step step)
+        public async Task<IActionResult> Put(Step step)
         {
             await _repository.UpdateStep(step);
             return NoContent();
@@ -57,7 +57,7 @@ namespace Application.Controllers
 
         // DELETE api/<StepController>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             await _repository.DeleteStep(id);
             return NoContent();

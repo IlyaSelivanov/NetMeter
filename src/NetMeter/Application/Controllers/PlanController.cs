@@ -22,34 +22,34 @@ namespace Application.Controllers
 
         // GET: api/<PlanController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Plan>>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _repository.GetPlans();
+            return Ok(await _repository.GetPlans());
         }
 
         // GET api/<PlanController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Plan>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var plan = await _repository.GetPlanById(id);
 
             if (plan == null)
                 return NotFound();
 
-            return plan;
+            return Ok(plan);
         }
 
         // POST api/<PlanController>
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Plan plan)
+        public async Task<IActionResult> Post(Plan plan)
         {
             await _repository.CreatePlan(plan);
-            return plan.Id;
+            return Ok(plan.Id);
         }
 
         // PUT api/<PlanController>
         [HttpPut]
-        public async Task<ActionResult> Put(Plan plan)
+        public async Task<IActionResult> Put(Plan plan)
         {
             await _repository.UpdatePlan(plan);
             return NoContent();
@@ -57,7 +57,7 @@ namespace Application.Controllers
 
         // DELETE api/<PlanController>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             await _repository.DeletePlan(id);
             return NoContent();

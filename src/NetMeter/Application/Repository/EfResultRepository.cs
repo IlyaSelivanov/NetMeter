@@ -1,15 +1,14 @@
 ﻿using Application.Context;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Repository
 {
     public class EfResultRepository : IDisposable, IResultRepository
     {
+        private bool disposed = false;
         private readonly EfDbContext _db;
 
         public EfResultRepository(EfDbContext db)
@@ -23,13 +22,11 @@ namespace Application.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task CreateResults(List<Result> results)
+        public async Task CreateResults(IEnumerable<Result> results)
         {
             await _db.Results.AddRangeAsync(results);
             await _db.SaveChangesAsync();
         }
-
-        private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {

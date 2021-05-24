@@ -10,6 +10,7 @@ namespace Application.Repository
 {
     public class EfExecutionRepository : IDisposable, IExecutionRepository
     {
+        private bool disposed = false;
         private readonly EfDbContext _db;
 
         public EfExecutionRepository(EfDbContext db)
@@ -17,7 +18,7 @@ namespace Application.Repository
             _db = db;
         }
 
-        public async Task<List<Execution>> GetExecutions()
+        public async Task<IEnumerable<Execution>> GetExecutions()
         {
             return await _db.Executions
                 .Include(e => e.Plan)
@@ -55,8 +56,6 @@ namespace Application.Repository
                 await _db.SaveChangesAsync();
             }
         }
-
-        private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {

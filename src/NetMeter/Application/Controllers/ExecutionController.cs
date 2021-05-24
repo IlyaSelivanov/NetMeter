@@ -23,7 +23,7 @@ namespace Application.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Execution execution)
+        public async Task<IActionResult> Post(Execution execution)
         {
             await _executionRepository.CreateExecution(execution);
             await _executorService.SetExecutionPlan(execution.PlanId);
@@ -35,20 +35,20 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Execution>>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _executionRepository.GetExecutions();
+            return Ok(await _executionRepository.GetExecutions());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Execution>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var execution = await _executionRepository.GetExecutionById(id);
 
             if (execution == null)
                 return NotFound();
 
-            return execution;
+            return Ok(execution);
         }
     }
 }

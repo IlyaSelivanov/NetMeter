@@ -1,16 +1,15 @@
 ﻿using Application.Context;
-using Domain.Concrete;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Repository
 {
     public class EfStepRepository : IStepRepository, IDisposable
     {
+        private bool disposed = false;
         private readonly EfDbContext _db;
 
         public EfStepRepository(EfDbContext db)
@@ -18,7 +17,7 @@ namespace Application.Repository
             _db = db;
         }
 
-        public async Task<List<Step>> GetSteps()
+        public async Task<IEnumerable<Step>> GetSteps()
         {
             return await _db.Steps.Include(s => s.Plan).ToListAsync();
         }
@@ -50,8 +49,6 @@ namespace Application.Repository
                 await _db.SaveChangesAsync();
             }
         }
-
-        private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {

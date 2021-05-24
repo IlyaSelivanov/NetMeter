@@ -7,6 +7,6 @@ namespace Application.Repository
     public interface IResultRepository
     {
         Task CreateResult(Result result);
-        Task CreateResults(List<Result> results);
+        Task CreateResults(IEnumerable<Result> results);
     }
 }
