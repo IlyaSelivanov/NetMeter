@@ -13,7 +13,5 @@ namespace Domain.Abstract
         Task Create(TEntity item);
         Task Update(TEntity item);
         Task Delete(int id);
-        IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
-        IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

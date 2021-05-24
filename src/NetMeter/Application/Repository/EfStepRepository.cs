@@ -1,4 +1,5 @@
 ﻿using Application.Context;
+using Domain.Concrete;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,7 +25,7 @@ namespace Application.Repository
 
         public async Task<Step> GetStepById(int id)
         {
-            return await _db.Steps.Include(s => s.Plan).Where(s => s.Id == id).FirstOrDefaultAsync();
+            return await _db.Steps.Include(s => s.Plan).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task CreateStep(Step step)
