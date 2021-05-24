@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Domain.Repository;
+﻿using Domain.Abstract;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,10 +11,9 @@ namespace Application.Controllers
     [ApiController]
     public class PlanController : ControllerBase
     {
-        //private readonly IGenericRepository<Plan> _repository;
-        private readonly IPlanRepository _repository;
+        private readonly IGenericRepository<Plan> _repository;
 
-        public PlanController(IPlanRepository repository)
+        public PlanController(IGenericRepository<Plan> repository)
         {
             _repository = repository;
         }
@@ -23,14 +22,14 @@ namespace Application.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _repository.GetPlans());
+            return Ok(await _repository.Get());
         }
 
         // GET api/<PlanController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var plan = await _repository.GetPlanById(id);
+            var plan = await _repository.Get(id);
 
             if (plan == null)
                 return NotFound();
@@ -42,7 +41,7 @@ namespace Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Plan plan)
         {
-            await _repository.CreatePlan(plan);
+            await _repository.Create(plan);
             return Ok(plan.Id);
         }
 
@@ -50,7 +49,7 @@ namespace Application.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Plan plan)
         {
-            await _repository.UpdatePlan(plan);
+            await _repository.Update(plan);
             return NoContent();
         }
 
@@ -58,7 +57,7 @@ namespace Application.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _repository.DeletePlan(id);
+            await _repository.Delete(id);
             return NoContent();
         }
     }

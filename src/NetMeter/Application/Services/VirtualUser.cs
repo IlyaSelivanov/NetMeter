@@ -1,6 +1,6 @@
 ﻿using Application.Helpers;
+using Domain.Abstract;
 using Domain.Entities;
-using Domain.Repository;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -13,17 +13,17 @@ namespace Application.Services
     {
         private Plan _plan;
         private Execution _execution;
-        private readonly IExecutionRepository _executionRepository;
-        private readonly IResultRepository _resultRepository;
+        private readonly IGenericRepository<Execution> _executionRepository;
+        private readonly IGenericRepository<Result> _resultRepository;
 
         private RestClient _restClient;
         private List<UserRequest> _requests;
         private List<Result> _results;
 
         public VirtualUser(Plan plan, 
-            Execution execution, 
-            IExecutionRepository executionRepository, 
-            IResultRepository resultRepository)
+            Execution execution,
+            IGenericRepository<Execution> executionRepository,
+            IGenericRepository<Result> resultRepository)
         {
             _plan = plan;
             _execution = execution;
@@ -72,10 +72,10 @@ namespace Application.Services
 
         public async Task SaveResults()
         {
-            await _resultRepository.CreateResults(_results);
+            await _resultRepository.Create(_results);
 
             _execution.Results.AddRange(_results);
-            await _executionRepository.UpdateExecution(_execution);
+            await _executionRepository.Update(_execution);
         }
 
         private UserRequest CreateRequest(Step step)

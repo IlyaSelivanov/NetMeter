@@ -1,6 +1,8 @@
 using Application.Services;
+using Domain.Abstract;
 using Domain.Concrete;
-using Domain.Repository;
+using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -41,10 +43,10 @@ namespace Application
             services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
             services.AddScoped<EfDbContext>();
             services.AddScoped<ExecutorService>();
-            services.AddScoped<IPlanRepository, EfPlanRepository>();
-            services.AddScoped<IStepRepository, EfStepRepository>();
-            services.AddScoped<IResultRepository, EfResultRepository>();
-            services.AddScoped<IExecutionRepository, EfExecutionRepository>();
+            services.AddScoped(typeof(IGenericRepository<Plan>), typeof(EfPlanRepository));
+            services.AddScoped(typeof(IGenericRepository<Step>), typeof(EfStepRepository));
+            services.AddScoped(typeof(IGenericRepository<Execution>), typeof(EfExecutionRepository));
+            services.AddScoped(typeof(IGenericRepository<Result>), typeof(EfResultRepository));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

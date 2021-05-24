@@ -1,6 +1,6 @@
 ﻿using Application.Services;
+using Domain.Abstract;
 using Domain.Entities;
-using Domain.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -10,12 +10,12 @@ namespace Application.Controllers
     [ApiController]
     public class ExecutionController : ControllerBase
     {
-        private readonly IExecutionRepository _executionRepository;
+        private readonly IGenericRepository<Execution> _executionRepository;
         private readonly ExecutorService _executorService;
 
         public ExecutionController(
             ExecutorService executorService,
-            IExecutionRepository executionRepository)
+            IGenericRepository<Execution> executionRepository)
         {
             _executionRepository = executionRepository;
             _executorService = executorService;
@@ -24,7 +24,7 @@ namespace Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Execution execution)
         {
-            await _executionRepository.CreateExecution(execution);
+            await _executionRepository.Create(execution);
             await _executorService.SetExecutionPlan(execution.PlanId);
             _executorService.Execution = execution;
             _executorService.CreateUsers();
@@ -36,13 +36,13 @@ namespace Application.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _executionRepository.GetExecutions());
+            return Ok(await _executionRepository.Get());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var execution = await _executionRepository.GetExecutionById(id);
+            var execution = await _executionRepository.Get(id);
 
             if (execution == null)
                 return NotFound();

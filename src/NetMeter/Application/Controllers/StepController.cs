@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Domain.Repository;
+﻿using Domain.Abstract;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,9 +11,9 @@ namespace Application.Controllers
     [ApiController]
     public class StepController : ControllerBase
     {
-        private readonly IStepRepository _repository;
+        private readonly IGenericRepository<Step> _repository;
 
-        public StepController(IStepRepository repository)
+        public StepController(IGenericRepository<Step> repository)
         {
             _repository = repository;
         }
@@ -22,14 +22,14 @@ namespace Application.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _repository.GetSteps());
+            return Ok(await _repository.Get());
         }
 
         // GET api/<StepController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var step = await _repository.GetStepById(id);
+            var step = await _repository.Get(id);
 
             if (step == null)
                 return NotFound();
@@ -41,7 +41,7 @@ namespace Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Step step)
         {
-            await _repository.CreateStep(step);
+            await _repository.Create(step);
             return Ok(step.Id);
         }
 
@@ -49,7 +49,7 @@ namespace Application.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Step step)
         {
-            await _repository.UpdateStep(step);
+            await _repository.Update(step);
             return NoContent();
         }
 
@@ -57,7 +57,7 @@ namespace Application.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _repository.DeleteStep(id);
+            await _repository.Delete(id);
             return NoContent();
         }
     }

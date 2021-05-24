@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using Domain.Abstract;
+using Domain.Entities;
 using Domain.Enums;
-using Domain.Repository;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,9 +13,9 @@ namespace Application.Services
     {
         private Plan _plan;
         private Execution _execution;
-        private readonly IResultRepository _resultRepository;
-        private readonly IExecutionRepository _executionRepository;
-        private readonly IPlanRepository _planRepository;
+        private readonly IGenericRepository<Result> _resultRepository;
+        private readonly IGenericRepository<Execution> _executionRepository;
+        private readonly IGenericRepository<Plan> _planRepository;
 
         private List<VirtualUser> _users = new List<VirtualUser>();
 
@@ -32,9 +32,9 @@ namespace Application.Services
         }
 
         public ExecutorService(
-            IResultRepository resultRepository,
-            IExecutionRepository executionRepository,
-            IPlanRepository planRepository)
+            IGenericRepository<Result> resultRepository,
+            IGenericRepository<Execution> executionRepository,
+            IGenericRepository<Plan> planRepository)
         {
             _resultRepository = resultRepository;
             _executionRepository = executionRepository;
@@ -43,7 +43,7 @@ namespace Application.Services
 
         internal async Task SetExecutionPlan(int planId)
         {
-            _plan = await _planRepository.GetPlanById(planId);
+            _plan = await _planRepository.Get(planId);
 
             if (_plan == null)
                 throw new ApplicationException("Couldn't find plan to execute.");
@@ -87,7 +87,7 @@ namespace Application.Services
 
             _execution.Status = (int)ExecutionStatus.Completed;
             _execution.EndTime = DateTime.Now;
-            await _executionRepository.UpdateExecution(_execution);
+            await _executionRepository.Update(_execution);
         }
     }
 }

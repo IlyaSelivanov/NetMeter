@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Concrete
 {
-    abstract public class EfGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class EfGenericRepository<TEntity> : IGenericRepository<TEntity>, IDisposable
+        where TEntity : class
     {
         private bool disposed = false;
         private readonly EfDbContext db;
@@ -18,13 +19,19 @@ namespace Domain.Concrete
             dbSet = db.Set<TEntity>();
         }
 
-        public async Task<List<TEntity>> Get() => await dbSet.AsNoTracking().ToListAsync();
+        public virtual async Task<IEnumerable<TEntity>> Get() => await dbSet.AsNoTracking().ToListAsync();
 
-        public TEntity Get(int id) => dbSet.Find(id);
+        public virtual async Task<TEntity> Get(int id) => await dbSet.FindAsync(id);
 
         public async Task Create(TEntity item)
         {
             dbSet.Add(item);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task Create(IEnumerable<TEntity> items)
+        {
+            await dbSet.AddRangeAsync(items);
             await db.SaveChangesAsync();
         }
 
