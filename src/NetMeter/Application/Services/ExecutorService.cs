@@ -1,6 +1,6 @@
-﻿using Application.Repository;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Enums;
+using Domain.Repository;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -1,8 +1,7 @@
-﻿using Application.Repository;
-using Application.Services;
+﻿using Application.Services;
 using Domain.Entities;
+using Domain.Repository;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Application.Controllers

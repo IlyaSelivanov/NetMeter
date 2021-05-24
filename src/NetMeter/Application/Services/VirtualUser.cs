@@ -1,6 +1,6 @@
 ﻿using Application.Helpers;
-using Application.Repository;
 using Domain.Entities;
+using Domain.Repository;
 using RestSharp;
 using System;
 using System.Collections.Generic;

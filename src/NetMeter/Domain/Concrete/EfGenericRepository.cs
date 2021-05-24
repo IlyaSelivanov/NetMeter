@@ -9,10 +9,10 @@ namespace Domain.Concrete
     abstract public class EfGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
         private bool disposed = false;
-        private readonly DbDomainContext db;
+        private readonly EfDbContext db;
         private readonly DbSet<TEntity> dbSet;
 
-        public EfGenericRepository(DbDomainContext context)
+        public EfGenericRepository(EfDbContext context)
         {
             db = context;
             dbSet = db.Set<TEntity>();

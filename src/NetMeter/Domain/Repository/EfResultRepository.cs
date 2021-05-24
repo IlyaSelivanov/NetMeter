@@ -1,10 +1,10 @@
-﻿using Application.Context;
+﻿using Domain.Concrete;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Application.Repository
+namespace Domain.Repository
 {
     public class EfResultRepository : IDisposable, IResultRepository
     {

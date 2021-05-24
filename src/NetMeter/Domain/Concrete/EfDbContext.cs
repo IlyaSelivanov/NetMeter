@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Context
+namespace Domain.Concrete
 {
     public class EfDbContext : DbContext
     {
