@@ -1,7 +1,9 @@
 ﻿using Application.Services;
 using Domain.Abstract;
 using Domain.Entities;
+using Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Controllers
@@ -48,6 +50,26 @@ namespace Application.Controllers
                 return NotFound();
 
             return Ok(execution);
+        }
+
+        [HttpGet("AggregateResult/{id}")]
+        public async Task<IActionResult> GetAggregateResult(int id)
+        {
+            var execution = await _executionRepository.Get(id);
+
+            if (execution == null)
+                return NotFound();
+
+            var agregateResults = execution.Results
+                .GroupBy(r => r.StatusCode)
+                .Select(g => new AggregateResult
+                {
+                    ResponseCode = g.Key,
+                    Number = g.Count(),
+                    AverageResponseTime = g.Average(r => r.ResponseTime)
+                }).ToList();
+
+            return Ok(agregateResults);
         }
     }
 }

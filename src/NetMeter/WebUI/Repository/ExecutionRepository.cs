@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,12 @@ namespace WebUI.Repository
         public async Task<Execution> GetExecutionById(int id)
         {
             var response = await _httpService.Get<Execution>($"{url}/{id}");
+            return response.Response;
+        }
+
+        public async Task<IEnumerable<AggregateResult>> GetAggregateResult(int id)
+        {
+            var response = await _httpService.Get<IEnumerable<AggregateResult>>($"{url}/AggregateResult/{id}");
             return response.Response;
         }
     }

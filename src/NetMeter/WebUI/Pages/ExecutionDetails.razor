@@ -1,45 +1,33 @@
 ﻿@page "/plan/{PlanId:int}/execution/{ExecutionId:int}"
 @inject IExecutionRepository executionRepository
 
-<h3>ExecutionDetails</h3>
-@if (execution == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <p>Requests number: @execution.Results.Count</p>
-}
+<h3>Execution Details</h3>
 
-@if (responseGroups == null)
+@if (aggregateResults == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    @foreach (var item in responseGroups)
+    <p>
+        <b>Total Requests:</b> @aggregateResults.Sum(r => r.Number)
+    </p>
+    @foreach (var item in aggregateResults)
     {
-        <p>Status @item.Name: @item.Count</p>
-        <p>Average Duration: @item.Average, ms</p>
+        <p>
+            <b>Status @item.ResponseCode:</b>  @item.Number; <b>Avg. Duration:</b> @item.AverageResponseTime.ToString("0.###"), ms
+        </p>
     }
 }
 
 @code {
-    private Execution execution;
-    private List<dynamic> responseGroups;
+    private IEnumerable<AggregateResult> aggregateResults;
 
     [Parameter] public int PlanId { get; set; }
     [Parameter] public int ExecutionId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        execution = await executionRepository.GetExecutionById(ExecutionId);
-        responseGroups = execution.Results.GroupBy(r => r.StatusCode)
-            .Select(g => new
-            {
-                Name = g.Key,
-                Count = g.Count(),
-                Average = g.Average(r => r.ResponseTime)
-            }).ToList<dynamic>();
+        aggregateResults = await executionRepository.GetAggregateResult(ExecutionId);
     }
 }
