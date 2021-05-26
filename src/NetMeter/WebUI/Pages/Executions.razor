@@ -1,19 +1,40 @@
 ﻿@page "/plan/{PlanId:int}/executions"
-@inject IExecutionRepository executionsRepository
+@inject IExecutionRepository executionRepository
+@inject IPlanRepository planRepository
+@inject IStepRepository stepRepository
 
 <h3>Executions</h3>
+<button class="btn btn-primary" @onclick="@RunPlan">Run</button>
 <ExecutionsList Executions="executions"></ExecutionsList>
 
 @code {
     private List<Execution> executions = new List<Execution>();
+    private Plan plan = new Plan();
 
     [Parameter] public int PlanId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var execs = await executionsRepository.GetPlanExecutions(PlanId);
+        var execs = await executionRepository.GetPlanExecutions(PlanId);
+        plan = await planRepository.GetPlanById(PlanId);
 
         if (execs != null && execs.Count() > 0)
             executions.AddRange(execs);
+    }
+
+    private async Task RunPlan()
+    {
+        Execution execution = new Execution();
+        execution.StartTime = DateTime.Now;
+        execution.Status = (int)ExecutionStatus.Running;
+        execution.PlanId = plan.Id;
+        //execution.Plan = plan;
+
+        executions.Add(execution);
+
+        plan.Executions.Add(execution);
+        await planRepository.UpdatePlan(plan);
+
+        await executionRepository.CreateExecution(execution);
     }
 }

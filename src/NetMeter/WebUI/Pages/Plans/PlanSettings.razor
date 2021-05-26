@@ -1,10 +1,5 @@
 ﻿@page "/plan/settings/{PlanId:int}"
 @inject IPlanRepository planRepository
-@inject IStepRepository stepRepository
-@inject IExecutionRepository executionRepository
-@inject HttpClient httpClient
-@using System.Text.Json;
-@using System.Text;
 
 <h3>Plan Settings</h3>
 <div class="d-flex flex-column">
@@ -12,8 +7,6 @@
     <div class="p-2 bd-highlight">@plan.EndpointUrl</div>
     <div class="p-2 bd-highlight">@plan.UsersNumber user(s)</div>
 </div>
-
-<button class="btn-primary" @onclick="@RunPlan">Run</button>
 
 <a href="@createStepUrl" class="btn btn-info">Create New Step</a>
 
@@ -29,19 +22,5 @@
     {
         plan = await planRepository.GetPlanById(PlanId);
         createStepUrl = $"/plan/settings/{PlanId}/step/create";
-    }
-
-    private async Task RunPlan()
-    {
-        Execution execution = new Execution();
-        execution.StartTime = DateTime.Now;
-        execution.Status = (int)ExecutionStatus.Running;
-        execution.PlanId = plan.Id;
-        //execution.Plan = plan;
-
-        plan.Executions.Add(execution);
-        await planRepository.UpdatePlan(plan);
-
-        await executionRepository.CreateExecution(execution);
     }
 }
