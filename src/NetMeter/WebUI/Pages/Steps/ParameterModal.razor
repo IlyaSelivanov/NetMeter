@@ -1,0 +1,55 @@
+﻿@if (showModal)
+{
+    <div class="modal fade show" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display:block">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="Hide" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@Parameter">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        <ValidationSummary></ValidationSummary>
+                        <div class="form-group">
+                            <label>
+                                Name: <InputText class="form-control" @bind-Value="Parameter.Key"></InputText>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Value: <InputText class="form-control" @bind-Value="Parameter.Value"></InputText>
+                            </label>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Hide">Close</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSaveChanges">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool showModal = false;
+
+    [Parameter] public EventCallback OnSaveChanges { get; set; }
+    public KeyValueParameter Parameter { get; private set; } = new KeyValueParameter();
+
+    public void Show()
+    {
+        showModal = true;
+        StateHasChanged();
+    }
+
+    public void Hide()
+    {
+        showModal = false;
+        Parameter.Key = "";
+        Parameter.Value = "";
+    }
+}

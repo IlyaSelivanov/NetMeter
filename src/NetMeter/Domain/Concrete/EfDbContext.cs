@@ -22,7 +22,7 @@ namespace Domain.Concrete
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connString = _connectionStringProvider.GetConnectionString("DomainDatabase");
-            optionsBuilder.UseSqlServer(connString);
+            optionsBuilder.UseSqlServer(connString, b => b.MigrationsAssembly("Application"));
         }
     }
 }

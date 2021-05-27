@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
@@ -9,8 +10,8 @@ namespace Domain.Entities
         public string Resource { get; set; }
         [Required]
         public int Method { get; set; }
-        public string Headers { get; set; }
         public string Parameters { get; set; }
+        public string Headers { get; set; }
         public string Body { get; set; }
 
         public int PlanId { get; set; }

@@ -4,13 +4,13 @@
 
     <div class="form-group">
         <label>
-            Resource: <InputText @bind-Value="Step.Resource"></InputText>
+            Resource: <InputText class="form-control" @bind-Value="Step.Resource"></InputText>
         </label>
     </div>
     <div class="form-group">
         <label> Method: </label>
         <div>
-            <InputSelect @bind-Value="Step.Method">
+            <InputSelect class="form-select" style="width:auto;" @bind-Value="Step.Method">
                 <option value=""></option>
                 <option value="0">GET</option>
                 <option value="1">POST</option>
@@ -19,10 +19,84 @@
             </InputSelect>
         </div>
     </div>
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        <div>
+            <label>Parameters: </label>
+        </div>
+        @if (parameters != null && parameters.Count > 0)
+        {
+            <div>
+                <ul class="list-group" style="width:1ae;">
+                    @foreach (var item in parameters)
+                    {
+                        <li class="list-group-item">
+                            <div class="d-flex flex-row">
+                                <div class="p-2">@item.Key</div>
+                                <div class="p-2">@item.Value</div>
+                                <div class="p-2">
+                                    <button class="btn btn-link" type="button">Delete</button>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        <div>
+            <button class="btn btn-secondary" type="button" @onclick="ShowParameterModal">Add Parameter</button>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
 </EditForm>
 
+<ParameterModal @ref="modal" OnSaveChanges="SaveParameters" />
+
+
 @code {
+    private List<KeyValueParameter> headers;
+    private List<KeyValueParameter> parameters;
+    private string body;
+    private ParameterModal modal;
+
     [Parameter] public Step Step { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var h = DeserializeJson(Step.Headers);
+        var p = DeserializeJson(Step.Parameters);
+
+        headers = h == null ? new List<KeyValueParameter>() : h;
+        parameters = p == null ? new List<KeyValueParameter>() : p;
+        body = Step.Body;
+    }
+
+    private void ShowParameterModal()
+    {
+        modal.Show();
+    }
+
+    private void SaveParameters()
+    {
+        parameters.Add(modal.Parameter);
+        StateHasChanged();
+        Step.Parameters = JsonSerializer.Serialize(parameters);
+        modal.Hide();
+    }
+
+    private List<KeyValueParameter> DeserializeJson(string json)
+    {
+        if (string.IsNullOrEmpty(json))
+            return null;
+
+        try
+        {
+            return JsonSerializer.Deserialize<List<KeyValueParameter>>(json);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
+    }
 }

@@ -54,8 +54,8 @@ namespace Application.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Resource = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Method = table.Column<int>(type: "int", nullable: false),
-                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Parameters = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PlanId = table.Column<int>(type: "int", nullable: false)
                 },

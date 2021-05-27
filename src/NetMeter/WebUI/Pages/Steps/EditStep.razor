@@ -3,10 +3,18 @@
 @inject IStepRepository stepRepository
 @inject NavigationManager navManager
 
-<StepForm Step="step" OnValidSubmit="SaveStep"></StepForm>
+@if (step == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <StepForm Step="step" OnValidSubmit="SaveStep"></StepForm>
+}
+
 
 @code {
-    private Step step = new Step();
+    private Step step;
 
     [Parameter] public int PlanId { get; set; }
     [Parameter] public int StepId { get; set; }
