@@ -38,10 +38,11 @@
     private bool showModal = false;
 
     [Parameter] public EventCallback OnSaveChanges { get; set; }
-    public KeyValueParameter Parameter { get; private set; } = new KeyValueParameter();
+    public KeyValueParameter Parameter { get; private set; }// = new KeyValueParameter();
 
     public void Show()
     {
+        Parameter = new KeyValueParameter();
         showModal = true;
         StateHasChanged();
     }
@@ -49,7 +50,5 @@
     public void Hide()
     {
         showModal = false;
-        Parameter.Key = "";
-        Parameter.Value = "";
     }
 }

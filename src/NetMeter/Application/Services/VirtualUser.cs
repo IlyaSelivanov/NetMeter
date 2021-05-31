@@ -83,8 +83,8 @@ namespace Application.Services
             RestRequest request = new RequestBuilder()
                 .Resource(step.Resource)
                 .Method(step.Method)
-                //.Headers(step.Headers)
-                //.Parameters(step.Parameters)
+                .Headers(step.Headers)
+                .Parameters(step.Parameters)
                 .Body(step.Body)
                 .Build();
 

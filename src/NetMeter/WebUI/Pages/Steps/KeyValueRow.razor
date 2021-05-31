@@ -1,0 +1,16 @@
+﻿<tr>
+    <td>
+        <input @bind="Value.Key" />
+    </td>
+    <td>
+        <input @bind="Value.Value" />
+    </td>
+    <td>
+        <button class="btn btn-danger" @onclick="Delete" type="button">Delete</button>
+    </td>
+</tr>
+
+@code {
+    [Parameter] public KeyValueParameter Value { get; set; }
+    [Parameter] public EventCallback Delete { get; set; }
+}

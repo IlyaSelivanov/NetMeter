@@ -19,44 +19,53 @@
             </InputSelect>
         </div>
     </div>
-    <div class="form-group">
-        <div>
-            <label>Parameters: </label>
-        </div>
-        @if (parameters != null && parameters.Count > 0)
-        {
-            <div>
-                <ul class="list-group" style="width:1ae;">
-                    @foreach (var item in parameters)
-                    {
-                        <li class="list-group-item">
-                            <div class="d-flex flex-row">
-                                <div class="p-2">@item.Key</div>
-                                <div class="p-2">@item.Value</div>
-                                <div class="p-2">
-                                    <button class="btn btn-link" type="button">Delete</button>
-                                </div>
-                            </div>
-                        </li>
-                    }
-                </ul>
+    <div class="accordion" id="accordion">
+        <div class="card">
+            <div class="card-header" id="parameters">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseParameters"
+                            aria-expanded="true" aria-controls="collapseParameters">
+                        Parameters
+                    </button>
+                </h2>
             </div>
-        }
-        <div>
-            <button class="btn btn-secondary" type="button" @onclick="ShowParameterModal">Add Parameter</button>
+
+            <div id="collapseParameters" class="collapse show" aria-labelledby="parameters" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="form-group">
+                        <KeyValueTable Collection="parameters" Save="SaveParameters"></KeyValueTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headers">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseHeaders"
+                            aria-expanded="true" aria-controls="collapseHeaders">
+                        Headers
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseHeaders" class="collapse show" aria-labelledby="headers" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="form-group">
+                        <KeyValueTable Collection="headers" Save="SaveHeaders"></KeyValueTable>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <button class="btn btn-primary" type="submit">Submit</button>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
 </EditForm>
-
-<ParameterModal @ref="modal" OnSaveChanges="SaveParameters" />
-
 
 @code {
     private List<KeyValueParameter> headers;
     private List<KeyValueParameter> parameters;
     private string body;
-    private ParameterModal modal;
 
     [Parameter] public Step Step { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
@@ -71,17 +80,14 @@
         body = Step.Body;
     }
 
-    private void ShowParameterModal()
-    {
-        modal.Show();
-    }
-
     private void SaveParameters()
     {
-        parameters.Add(modal.Parameter);
-        StateHasChanged();
         Step.Parameters = JsonSerializer.Serialize(parameters);
-        modal.Hide();
+    }
+
+    private void SaveHeaders()
+    {
+        Step.Headers = JsonSerializer.Serialize(headers);
     }
 
     private List<KeyValueParameter> DeserializeJson(string json)
