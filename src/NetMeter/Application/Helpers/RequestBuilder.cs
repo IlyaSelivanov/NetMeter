@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Domain.ValueObjects;
+using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Helpers
 {
@@ -28,11 +30,19 @@ namespace Application.Helpers
             return this;
         }
 
+        public RequestBuilder Headers(List<KeyValueParameter> headers)
+        {
+            if (headers != null && headers.Count > 0)
+                _request.AddHeaders(headers.ToDictionary(h => h.Key, h => h.Value));
+
+            return this;
+        }
+
         public RequestBuilder Headers(string json)
         {
             if (!string.IsNullOrEmpty(json))
             {
-                Dictionary<string, string> headers = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                List<KeyValueParameter> headers = JsonConvert.DeserializeObject<List<KeyValueParameter>>(json);
                 return Headers(headers);
             }
 
@@ -44,12 +54,17 @@ namespace Application.Helpers
             return AddOrUpdateParameters(parameters, ParameterType.QueryString);
         }
 
+        public RequestBuilder Parameters(List<KeyValueParameter> parameters)
+        {
+            return AddOrUpdateParameters(parameters.ToDictionary(p => p.Key, p => p.Value), ParameterType.QueryString);
+        }
+
         public RequestBuilder Parameters(string json)
         {
             if (!string.IsNullOrEmpty(json))
             {
-                Dictionary<string, string> parametes = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-                return AddOrUpdateParameters(parametes, ParameterType.QueryString);
+                List<KeyValueParameter> parametes = JsonConvert.DeserializeObject<List<KeyValueParameter>>(json);
+                return Parameters(parametes);
             }
 
             return this;

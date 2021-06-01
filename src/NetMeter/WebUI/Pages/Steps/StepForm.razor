@@ -29,7 +29,6 @@
                     </button>
                 </h2>
             </div>
-
             <div id="collapseParameters" class="collapse show" aria-labelledby="parameters" data-parent="#accordion">
                 <div class="card-body">
                     <div class="form-group">
@@ -47,11 +46,30 @@
                     </button>
                 </h2>
             </div>
-
             <div id="collapseHeaders" class="collapse show" aria-labelledby="headers" data-parent="#accordion">
                 <div class="card-body">
                     <div class="form-group">
                         <KeyValueTable Collection="headers" Save="SaveHeaders"></KeyValueTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="body">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseBody"
+                            aria-expanded="true" aria-controls="collapseHeaders">
+                        Body
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseBody" class="collapse show" aria-labelledby="body" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="form-group">
+                        <textarea rows="10" cols="50"
+                                  @bind-value="Step.Body"
+                                  @bind-value:event="oninput">
+                        </textarea>
                     </div>
                 </div>
             </div>
