@@ -1,4 +1,5 @@
 using Application.Services;
+using Application.Workflow;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.Entities;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WorkflowCore.Interface;
 
 namespace Application
 {
@@ -47,6 +49,8 @@ namespace Application
             services.AddScoped(typeof(IGenericRepository<Step>), typeof(EfStepRepository));
             services.AddScoped(typeof(IGenericRepository<Execution>), typeof(EfExecutionRepository));
             services.AddScoped(typeof(IGenericRepository<Result>), typeof(EfResultRepository));
+
+            services.AddWorkflow();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +69,10 @@ namespace Application
             {
                 endpoints.MapControllers();
             });
+
+            var host = app.ApplicationServices.GetService<IWorkflowHost>();
+            host.RegisterWorkflow<RequestWorkflow, RequestData>();
+            host.Start();
         }
     }
 }

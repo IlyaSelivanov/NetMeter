@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using WorkflowCore.Interface;
 
 namespace Application.Services
 {
@@ -16,6 +17,7 @@ namespace Application.Services
         private readonly IGenericRepository<Result> _resultRepository;
         private readonly IGenericRepository<Execution> _executionRepository;
         private readonly IGenericRepository<Plan> _planRepository;
+        private readonly IWorkflowController _workflowService;
 
         private List<VirtualUser> _users = new List<VirtualUser>();
 
@@ -34,11 +36,13 @@ namespace Application.Services
         public ExecutorService(
             IGenericRepository<Result> resultRepository,
             IGenericRepository<Execution> executionRepository,
-            IGenericRepository<Plan> planRepository)
+            IGenericRepository<Plan> planRepository,
+            IWorkflowController workflowService)
         {
             _resultRepository = resultRepository;
             _executionRepository = executionRepository;
             _planRepository = planRepository;
+            _workflowService = workflowService;
         }
 
         internal async Task SetExecutionPlan(int planId)
@@ -56,7 +60,7 @@ namespace Application.Services
 
             for (int i = 0; i < _plan.UsersNumber; i++)
             {
-                VirtualUser user = new VirtualUser(_plan, _execution, _executionRepository, _resultRepository);
+                VirtualUser user = new VirtualUser(_plan, _execution, _executionRepository, _resultRepository, _workflowService);
                 user.CreateRequests();
                 _users.Add(user);
             }
