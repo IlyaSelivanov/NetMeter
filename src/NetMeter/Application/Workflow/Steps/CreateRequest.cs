@@ -32,11 +32,17 @@ namespace Application.Workflow.Steps
             Console.WriteLine($"Step Id:\n {step.Id}");
             Console.WriteLine($"Parameters:\n {step.Parameters}");
 
-            _parameters = JsonConvert.DeserializeObject<List<KeyValueParameter>>(step.Parameters);
-            _headers = JsonConvert.DeserializeObject<List<KeyValueParameter>>(step.Headers);
+            if(step.Parameters != null)
+            {
+                _parameters = JsonConvert.DeserializeObject<List<KeyValueParameter>>(step.Parameters);
+                GetParametersFromVariables();
+            }
 
-            GetParametersFromVariables();
-            GetHeadersFromVariables();
+            if(step.Headers != null)
+            {
+                _headers = JsonConvert.DeserializeObject<List<KeyValueParameter>>(step.Headers);
+                GetHeadersFromVariables();
+            }
 
             Request = BuildRequest(step);
 

@@ -34,11 +34,16 @@ namespace Application.Workflow
                                 .Input(step => step.Execution, (data, context) => data.Execution)
                                 .Output(data => data.Result, step => step.Result)
                                 .Output(data => data.Results, step => step.Results)
+                            .Then<SaveResults>()
+                                .Input(step => step.Result, (data, context) => data.Result)
+                                .Input(step => step.Execution, (data, context) => data.Execution)
+                                //.Output(data => data.Results, step => step.Results)
                             )
                 .Then(context =>
                 {
                     Console.WriteLine("Workflow complete.");
-                });
+                })
+                .EndWorkflow();            
         }
     }
 }

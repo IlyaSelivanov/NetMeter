@@ -53,42 +53,8 @@ namespace Application.Services
 
         public async Task Run()
         {
-            //if (_requests.Count == 0)
-            //    CreateRequests();
-
-            //foreach (var request in _requests)
-            //{
-            //    var watch = new Stopwatch();
-
-            //    watch.Start();
-            //    var response =  await _restClient.ExecuteAsync(request.RestRequest);
-            //    watch.Stop();
-
-            //    Console.WriteLine((int)response.StatusCode);
-
-            //    Result r = new Result();
-            //    r.RequestResource = request.RequestResource;
-            //    r.StatusCode = (int)response.StatusCode;
-            //    r.ResponseBody = response.Content;
-            //    r.ResponseTime = watch.ElapsedMilliseconds;
-            //    r.ExecutionId = _execution.Id;
-
-            //    _results.Add(r);                
-            //}
-
             _data = new RequestData { Plan = _plan, Client = _restClient, Execution = _execution };
             await _workflowService.StartWorkflow("RequestWorkflow", 1, _data);
-            Console.WriteLine($"{_data.Results.Count}");
-        }
-
-        public async Task SaveResults()
-        {
-            _results = _data.Results;
-
-            await _resultRepository.Create(_results);
-
-            _execution.Results.AddRange(_results);
-            await _executionRepository.Update(_execution);
         }
 
         private UserRequest CreateRequest(Step step)

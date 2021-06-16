@@ -37,7 +37,7 @@ namespace Application.Workflow.Steps
             Result.ResponseTime = watch.ElapsedMilliseconds;
             Result.ExecutionId = Execution.Id;
 
-            Results.Add(Result);
+            //Results.Add(Result);
 
             return ExecutionResult.Next();
         }

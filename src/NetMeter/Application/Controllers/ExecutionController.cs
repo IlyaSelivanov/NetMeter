@@ -29,7 +29,6 @@ namespace Application.Controllers
             await _executionRepository.Create(execution);
             await _executorService.SetExecutionPlan(execution.PlanId);
             _executorService.Execution = execution;
-            _executorService.CreateUsers();
             await _executorService.Execute();
 
             return NoContent();

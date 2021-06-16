@@ -1,5 +1,6 @@
 using Application.Services;
 using Application.Workflow;
+using Application.Workflow.Steps;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.Entities;
@@ -51,6 +52,7 @@ namespace Application
             services.AddScoped(typeof(IGenericRepository<Result>), typeof(EfResultRepository));
 
             services.AddWorkflow();
+            services.AddTransient<SaveResults>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

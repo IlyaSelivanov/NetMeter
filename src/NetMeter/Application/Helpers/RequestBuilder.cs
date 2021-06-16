@@ -56,7 +56,10 @@ namespace Application.Helpers
 
         public RequestBuilder Parameters(List<KeyValueParameter> parameters)
         {
-            return AddOrUpdateParameters(parameters.ToDictionary(p => p.Key, p => p.Value), ParameterType.QueryString);
+            if(parameters != null)
+                return AddOrUpdateParameters(parameters.ToDictionary(p => p.Key, p => p.Value), ParameterType.QueryString);
+
+            return this;
         }
 
         public RequestBuilder Parameters(string json)
