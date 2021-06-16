@@ -24,13 +24,12 @@ namespace Application.Workflow.Steps
 
         public override ExecutionResult Run(IStepExecutionContext context)
         {
+            Console.WriteLine("Creating request...");
+
             Step step = Step as Step;
 
             if (step is null)
                 throw new ApplicationException("CreateRequest step - no step");
-
-            Console.WriteLine($"Step Id:\n {step.Id}");
-            Console.WriteLine($"Parameters:\n {step.Parameters}");
 
             if(step.Parameters != null)
             {

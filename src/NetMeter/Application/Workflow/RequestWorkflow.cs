@@ -11,8 +11,6 @@ namespace Application.Workflow
 
         public int Version => 1;
 
-        private RequestData _data;
-
         public void Build(IWorkflowBuilder<RequestData> builder)
         {
             builder
@@ -37,7 +35,6 @@ namespace Application.Workflow
                             .Then<SaveResults>()
                                 .Input(step => step.Result, (data, context) => data.Result)
                                 .Input(step => step.Execution, (data, context) => data.Execution)
-                                //.Output(data => data.Results, step => step.Results)
                             )
                 .Then(context =>
                 {

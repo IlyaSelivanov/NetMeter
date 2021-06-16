@@ -65,7 +65,7 @@ namespace Application.Services
                 {
                     var tasks = _users.Select(u => u.Run()).ToArray();
                     await Task.WhenAll(tasks);
-                    await Task.Delay(100);
+                    await Task.Delay(1000);
                 }
                 while (sw.Elapsed < TimeSpan.FromSeconds(_plan.Duration));
             }

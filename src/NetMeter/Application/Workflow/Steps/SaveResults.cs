@@ -1,5 +1,6 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WorkflowCore.Interface;
@@ -25,12 +26,9 @@ namespace Application.Workflow.Steps
 
         public override async Task<ExecutionResult> RunAsync(IStepExecutionContext context)
         {
+            Console.WriteLine("Saving results...");
+
             await _resultRepository.Create(Result);
-
-            //Execution.Results.Add(Result);
-            //await _executionRepository.Update(Execution);
-
-            //Results.Clear();
 
             return ExecutionResult.Next();
         }

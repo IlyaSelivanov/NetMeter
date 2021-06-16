@@ -20,7 +20,7 @@ namespace Application.Workflow.Steps
 
         public override async Task<ExecutionResult> RunAsync(IStepExecutionContext context)
         {
-            Console.WriteLine("Sending request");
+            Console.WriteLine("Sending request...");
 
             var watch = new Stopwatch();
 
@@ -36,8 +36,6 @@ namespace Application.Workflow.Steps
             Result.ResponseBody = response.Content;
             Result.ResponseTime = watch.ElapsedMilliseconds;
             Result.ExecutionId = Execution.Id;
-
-            //Results.Add(Result);
 
             return ExecutionResult.Next();
         }
