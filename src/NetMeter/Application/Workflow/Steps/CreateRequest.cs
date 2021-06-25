@@ -73,7 +73,7 @@ namespace Application.Workflow.Steps
                     string varName = item.Value.Replace("%", "");
                     item.Value = Variables.Where(v => v.Key.Equals(varName))
                         .FirstOrDefault()
-                        .Value;
+                        ?.Value;
                 }
             }
         }
