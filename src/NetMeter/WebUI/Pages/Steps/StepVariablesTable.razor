@@ -1,0 +1,39 @@
+﻿<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Value</th>
+                <th scope="col">Source</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Collection)
+            {
+                <StepVariableRow Value="@item" Delete="@(() => DeleteItem(item))"></StepVariableRow>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <button class="btn btn-secondary" type="button" @onclick="AddItem">Add</button>
+    <button class="btn btn-primary" type="button" @onclick="Save">Save</button>
+</div>
+
+
+@code {
+    [Parameter] public List<StepVariable> Collection { get; set; }
+    [Parameter] public EventCallback Save { get; set; }
+
+    private void AddItem()
+    {
+        Collection.Add(new StepVariable());
+    }
+
+    private void DeleteItem(StepVariable item)
+    {
+        Collection.Remove(item);
+        StateHasChanged();
+    }
+}

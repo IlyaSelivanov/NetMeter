@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Application.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,6 +57,7 @@ namespace Application.Migrations
                     Parameters = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Variables = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PlanId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

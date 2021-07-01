@@ -17,6 +17,7 @@ namespace Application.Workflow.Steps
         public Result Result { get; set; }
         public Execution Execution { get; set; }
         public List<Result> Results { get; set; }
+        public IRestResponse Response { get; set; }
 
         public override async Task<ExecutionResult> RunAsync(IStepExecutionContext context)
         {
@@ -26,6 +27,7 @@ namespace Application.Workflow.Steps
 
             watch.Start();
             var response = await Client.ExecuteAsync(Request.RestRequest);
+            Response = response;
             watch.Stop();
 
             Console.WriteLine((int)response.StatusCode);

@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string Parameters { get; set; }
         public string Headers { get; set; }
         public string Body { get; set; }
+        public string Variables { get; set; }
 
         public int PlanId { get; set; }
         public Plan Plan { get; set; }

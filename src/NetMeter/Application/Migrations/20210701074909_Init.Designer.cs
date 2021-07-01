@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Application.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    [Migration("20210527160937_Initial")]
-    partial class Initial
+    [Migration("20210701074909_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -129,6 +129,9 @@ namespace Application.Migrations
 
                     b.Property<string>("Resource")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Variables")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

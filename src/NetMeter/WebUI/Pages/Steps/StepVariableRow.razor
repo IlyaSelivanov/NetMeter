@@ -1,0 +1,23 @@
+﻿<tr>
+    <td>
+        <input @bind="Value.Name" />
+    </td>
+    <td>
+        <input @bind="Value.Value" />
+    </td>
+    <td>
+        <button class="btn btn-danger" @onclick="Delete" type="button">Delete</button>
+    </td>
+    <td>
+        <InputSelect class="form-select" style="width:auto;" @bind-Value="Value.Source">
+            <option value="0">Content</option>
+            <option value="1">Headers</option>
+            <option value="2">Cookie</option>
+        </InputSelect>
+    </td>
+</tr>
+
+@code {
+    [Parameter] public StepVariable Value { get; set; }
+    [Parameter] public EventCallback Delete { get; set; }
+}

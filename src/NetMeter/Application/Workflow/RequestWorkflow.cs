@@ -30,11 +30,18 @@ namespace Application.Workflow
                                 .Input(step => step.Request, (data, context) => data.Request)
                                 .Input(step => step.Results, (data, context) => data.Results)
                                 .Input(step => step.Execution, (data, context) => data.Execution)
+                                .Input(step => step.Response, (data, context) => data.Response)
                                 .Output(data => data.Result, step => step.Result)
                                 .Output(data => data.Results, step => step.Results)
+                                .Output(data => data.Response, step => step.Response)
                             .Then<SaveResults>()
                                 .Input(step => step.Result, (data, context) => data.Result)
                                 .Input(step => step.Execution, (data, context) => data.Execution)
+                            .Then<UpdateVariables>()
+                                .Input(step => step.Step, (data, context) => context.Item)
+                                .Input(step => step.Variables, (data, context) => data.Variables)
+                                .Input(step => step.Response, (data, context) => data.Response)
+                                .Output(data => data.Variables, step => step.Variables)
                             )
                 .Then(context =>
                 {

@@ -74,6 +74,23 @@
                 </div>
             </div>
         </div>
+        <div class="card">
+            <div class="card-header" id="variables">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseHeaders"
+                            aria-expanded="true" aria-controls="collapseVariables">
+                        Variables
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseVariables" class="collapse show" aria-labelledby="variables" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="form-group">
+                        <StepVariablesTable Collection="variables" Save="SaveVariables"></StepVariablesTable>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="form-group">
         <button class="btn btn-primary" type="submit">Submit</button>
@@ -83,6 +100,7 @@
 @code {
     private List<KeyValueParameter> headers;
     private List<KeyValueParameter> parameters;
+    private List<StepVariable> variables;
     private string body;
 
     [Parameter] public Step Step { get; set; }
@@ -90,11 +108,13 @@
 
     protected override void OnInitialized()
     {
-        var h = DeserializeJson(Step.Headers);
-        var p = DeserializeJson(Step.Parameters);
+        var h = DeserializeJson<KeyValueParameter>(Step.Headers);
+        var p = DeserializeJson<KeyValueParameter>(Step.Parameters);
+        var v = DeserializeJson<StepVariable>(Step.Variables);
 
         headers = h == null ? new List<KeyValueParameter>() : h;
         parameters = p == null ? new List<KeyValueParameter>() : p;
+        variables = v == null ? new List<StepVariable>() : v;
         body = Step.Body;
     }
 
@@ -108,14 +128,19 @@
         Step.Headers = JsonSerializer.Serialize(headers);
     }
 
-    private List<KeyValueParameter> DeserializeJson(string json)
+    private void SaveVariables()
+    {
+        Step.Variables = JsonSerializer.Serialize(variables);
+    }
+
+    private List<T> DeserializeJson<T>(string json) where T: class
     {
         if (string.IsNullOrEmpty(json))
             return null;
 
         try
         {
-            return JsonSerializer.Deserialize<List<KeyValueParameter>>(json);
+            return JsonSerializer.Deserialize<List<T>>(json);
         }
         catch (Exception ex)
         {

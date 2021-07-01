@@ -33,5 +33,6 @@ namespace Application.Workflow
                 _results = value;
             }
         }
+        public IRestResponse Response { get; set; }
     }
 }
