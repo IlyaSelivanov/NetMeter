@@ -2,6 +2,7 @@
 @inject IExecutionRepository executionRepository
 @inject IPlanRepository planRepository
 @inject IStepRepository stepRepository
+@attribute [Authorize]
 
 <h3>Executions</h3>
 <button class="btn btn-primary" @onclick="@RunPlan">Run</button>

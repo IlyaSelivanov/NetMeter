@@ -2,6 +2,7 @@
 @inject IPlanRepository planRepository
 @inject IStepRepository stepRepository
 @inject NavigationManager navManager
+@attribute [Authorize]
 
 <StepForm Step="step" OnValidSubmit="SaveStep"></StepForm>
 

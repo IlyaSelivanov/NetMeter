@@ -1,10 +1,11 @@
 ﻿using Application.Services;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Concrete
 {
-    public class EfDbContext : DbContext
+    public class EfDbContext : IdentityDbContext
     {
         private readonly IConnectionStringProvider _connectionStringProvider;
 

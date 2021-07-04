@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IPlanRepository planRepository
+@attribute [Authorize]
 
 <a href="plan/create" class="btn btn-info" style="margin: 1em">Create New Plan</a>
 <PlansList Plans="plans"></PlansList>

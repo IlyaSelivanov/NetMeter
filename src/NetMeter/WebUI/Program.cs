@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WebUI.Auth;
 using WebUI.Repository;
 using WebUI.Services;
 
@@ -16,7 +18,7 @@ namespace WebUI
             builder.RootComponents.Add<App>("#app");
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(@"https://localhost:5001/") });
+            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(@"https://localhost:5001/") });
 
             ConfigureServices(builder.Services);
 
@@ -29,6 +31,13 @@ namespace WebUI
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IStepRepository, StepRepository>();
             services.AddScoped<IExecutionRepository, ExecutionRepository>();
+            
+            services.AddAuthorizationCore();
+            services.AddScoped<JwtAuthenticationStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>(
+                provider => provider.GetRequiredService<JwtAuthenticationStateProvider>());
+            services.AddScoped<ILoginService, JwtAuthenticationStateProvider>(
+                provider => provider.GetRequiredService<JwtAuthenticationStateProvider>());
         }
     }
 }

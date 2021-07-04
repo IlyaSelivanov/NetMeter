@@ -2,6 +2,7 @@
 @inject IPlanRepository planRepository
 @inject IStepRepository stepRepository
 @inject NavigationManager navManager
+@attribute [Authorize]
 
 @if (step == null)
 {

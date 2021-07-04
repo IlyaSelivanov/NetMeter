@@ -1,5 +1,6 @@
 ﻿@page "/plan/settings/{PlanId:int}"
 @inject IPlanRepository planRepository
+@attribute [Authorize]
 
 <h3>Plan Settings</h3>
 <div class="d-flex flex-column">

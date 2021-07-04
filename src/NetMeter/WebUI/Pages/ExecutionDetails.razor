@@ -1,5 +1,6 @@
 ﻿@page "/plan/{PlanId:int}/execution/{ExecutionId:int}"
 @inject IExecutionRepository executionRepository
+@attribute [Authorize]
 
 <h3>Execution Details</h3>
 

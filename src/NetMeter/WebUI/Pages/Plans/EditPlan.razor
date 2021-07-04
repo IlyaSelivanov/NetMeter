@@ -1,6 +1,7 @@
 ﻿@page "/plan/edit/{PlanId:int}"
 @inject NavigationManager navManager
 @inject IPlanRepository planRepository
+@attribute [Authorize]
 
 <h3>Edit Plan</h3>
 
