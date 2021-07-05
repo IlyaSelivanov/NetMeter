@@ -83,7 +83,7 @@ namespace WebUI.Auth
             return Convert.FromBase64String(base64);
         }
 
-        public async Task Logint(string token)
+        public async Task Login(string token)
         {
             await _js.SetInLocalStorage(TOKEN_KEY, token);
             var authState = BuildAuthenticationState(token);

@@ -4,7 +4,7 @@ namespace WebUI.Auth
 {
     public interface ILoginService
     {
-        Task Logint(string token);
+        Task Login(string token);
         Task Logout();
     }
 }

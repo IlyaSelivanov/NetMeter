@@ -31,7 +31,8 @@ namespace WebUI
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IStepRepository, StepRepository>();
             services.AddScoped<IExecutionRepository, ExecutionRepository>();
-            
+            services.AddScoped<IAccountsRepository, AccountsRepository>();
+
             services.AddAuthorizationCore();
             services.AddScoped<JwtAuthenticationStateProvider>();
             services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>(
