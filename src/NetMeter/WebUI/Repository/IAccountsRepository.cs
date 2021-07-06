@@ -10,5 +10,6 @@ namespace WebUI.Repository
     {
         Task<UserToken> Login(UserInfo userInfo);
         Task<UserToken> Register(UserInfo userInfo);
+        Task<UserId> UserId();
     }
 }

@@ -1,7 +1,10 @@
 ﻿@page "/plan/settings/{PlanId:int}/step/create"
+
 @inject IPlanRepository planRepository
 @inject IStepRepository stepRepository
 @inject NavigationManager navManager
+@inject IAccountsRepository accRepository
+
 @attribute [Authorize]
 
 <StepForm Step="step" OnValidSubmit="SaveStep"></StepForm>
@@ -21,6 +24,7 @@
     {
         plan.Steps.Add(step);
         step.PlanId = plan.Id;
+        step.UserId = (await accRepository.UserId()).Id;
 
         await planRepository.UpdatePlan(plan);
         await stepRepository.CreateStep(step);

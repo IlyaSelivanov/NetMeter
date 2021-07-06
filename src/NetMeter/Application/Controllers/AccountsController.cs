@@ -1,4 +1,6 @@
 ﻿using Domain.ValueObjects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +23,17 @@ namespace Application.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountsController(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost("Create")]
@@ -53,6 +58,15 @@ namespace Application.Controllers
                 return Ok(BuildToken(model));
             else
                 return BadRequest("Username or password invalid");
+        }
+
+        [HttpGet("UserId")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult GetUserId()
+        {
+            var userId = _httpContextAccessor.HttpContext.User
+                .FindFirst(ClaimTypes.Email).Value;
+            return Ok(new UserId { Id = userId });
         }
 
         private UserToken BuildToken(UserInfo userInfo)

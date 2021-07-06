@@ -16,6 +16,16 @@
     <Compile Include="Migrations\20210701074909_Init.Designer.cs" />
     <Compile Include="Migrations\20210704140808_Identity.cs" />
     <Compile Include="Migrations\20210704140808_Identity.Designer.cs" />
+    <Compile Include="Migrations\20210706081502_Step_UserId.cs" />
+    <Compile Include="Migrations\20210706081502_Step_UserId.Designer.cs" />
+    <Compile Include="Migrations\20210706082036_Plan_UserId.cs" />
+    <Compile Include="Migrations\20210706082036_Plan_UserId.Designer.cs" />
+    <Compile Include="Migrations\20210706082410_Plan_Execution_UserId.cs" />
+    <Compile Include="Migrations\20210706082410_Plan_Execution_UserId.Designer.cs" />
+    <Compile Include="Migrations\20210706082517_Plan_Execution_Result_UserId.cs" />
+    <Compile Include="Migrations\20210706082517_Plan_Execution_Result_UserId.Designer.cs" />
+    <Compile Include="Migrations\20210706092311_RemoveFilter.cs" />
+    <Compile Include="Migrations\20210706092311_RemoveFilter.Designer.cs" />
     <Compile Include="Migrations\EfDbContextModelSnapshot.cs" />
   </ItemGroup>
 

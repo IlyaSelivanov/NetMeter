@@ -1,6 +1,10 @@
 ﻿using Domain.Abstract;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,13 +13,17 @@ namespace Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PlanController : ControllerBase
     {
         private readonly IGenericRepository<Plan> _repository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PlanController(IGenericRepository<Plan> repository)
+        public PlanController(IGenericRepository<Plan> repository,
+            IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: api/<PlanController>

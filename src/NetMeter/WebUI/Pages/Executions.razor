@@ -1,7 +1,10 @@
 ﻿@page "/plan/{PlanId:int}/executions"
+
 @inject IExecutionRepository executionRepository
 @inject IPlanRepository planRepository
 @inject IStepRepository stepRepository
+@inject IAccountsRepository accRepository
+
 @attribute [Authorize]
 
 <h3>Executions</h3>
@@ -29,6 +32,7 @@
         execution.StartTime = DateTime.Now;
         execution.Status = (int)ExecutionStatus.Running;
         execution.PlanId = plan.Id;
+        execution.UserId = (await accRepository.UserId()).Id;
         //execution.Plan = plan;
 
         executions.Add(execution);

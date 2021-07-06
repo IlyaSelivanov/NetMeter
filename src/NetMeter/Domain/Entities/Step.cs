@@ -14,6 +14,7 @@ namespace Domain.Entities
         public string Headers { get; set; }
         public string Body { get; set; }
         public string Variables { get; set; }
+        public string UserId { get; set; }
 
         public int PlanId { get; set; }
         public Plan Plan { get; set; }

@@ -2,6 +2,8 @@
 using Domain.Abstract;
 using Domain.Entities;
 using Domain.ValueObjects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ namespace Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ExecutionController : ControllerBase
     {
         private readonly IGenericRepository<Execution> _executionRepository;

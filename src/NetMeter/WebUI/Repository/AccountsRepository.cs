@@ -32,5 +32,14 @@ namespace WebUI.Repository
             else
                 return httpResponse.Response;
         }
+
+        public async Task<UserId> UserId()
+        {
+            var httpResponse = await _httpService.Get<UserId>($"{_baseUrl}/userid");
+            if (!httpResponse.Success)
+                throw new ApplicationException(await httpResponse.GetBody());
+            else
+                return httpResponse.Response;
+        }
     }
 }

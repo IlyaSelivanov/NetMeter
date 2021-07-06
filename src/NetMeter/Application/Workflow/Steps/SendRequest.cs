@@ -38,6 +38,7 @@ namespace Application.Workflow.Steps
             Result.ResponseBody = response.Content;
             Result.ResponseTime = watch.ElapsedMilliseconds;
             Result.ExecutionId = Execution.Id;
+            Result.UserId = Execution.UserId;
 
             return ExecutionResult.Next();
         }

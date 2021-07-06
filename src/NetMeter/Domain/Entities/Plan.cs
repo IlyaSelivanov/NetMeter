@@ -15,6 +15,7 @@ namespace Domain.Entities
         public int UsersNumber { get; set; } = 1;
         public bool IsLooped { get; set; } = false;
         public int Duration { get; set; } = 0;
+        public string UserId { get; set; }
 
         public List<Step> Steps { get; set; } = new List<Step>();
         public List<Execution> Executions { get; set; } = new List<Execution>();

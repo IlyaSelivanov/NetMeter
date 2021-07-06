@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain.Entities
 {
     public class Result
     {
@@ -7,6 +9,7 @@
         public int StatusCode { get; set; }
         public string ResponseBody { get; set; }
         public long ResponseTime { get; set; }
+        public string UserId { get; set; }
 
         public int ExecutionId { get; set; }
         public Execution Execution { get; set; }

@@ -1,6 +1,9 @@
 ﻿@page "/plan/create"
+
 @inject NavigationManager navManager
 @inject IPlanRepository planRepository
+@inject IAccountsRepository accRepository
+
 @attribute [Authorize]
 
 <h3>Create Plan</h3>
@@ -12,6 +15,8 @@
 
     private async Task SavePlan()
     {
+
+        plan.UserId = (await accRepository.UserId()).Id;
         await planRepository.CreatePlan(plan);
         navManager.NavigateTo("/");
     }
