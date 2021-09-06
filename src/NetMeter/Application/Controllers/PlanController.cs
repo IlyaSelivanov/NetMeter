@@ -26,6 +26,8 @@ namespace Application.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        // TODO REMOVE All such comments
+
         // GET: api/<PlanController>
         [HttpGet]
         public async Task<IActionResult> Get()

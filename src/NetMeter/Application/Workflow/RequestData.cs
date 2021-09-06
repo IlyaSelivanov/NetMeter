@@ -23,10 +23,12 @@ namespace Application.Workflow
                 if (_results == null)
                 {
                     _results = new List<Result>();
-                    return _results;
+                    return _results; // redundant
                 }
 
                 return _results;
+                // consider:
+                // return _result ??= new List<Result>();
             }
             set
             {

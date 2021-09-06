@@ -69,7 +69,7 @@ namespace Application.Controllers
             return Ok(new UserId { Id = userId });
         }
 
-        private UserToken BuildToken(UserInfo userInfo)
+        private UserToken BuildToken(UserInfo userInfo) // looks like it's not responsibility of controller
         {
             var claims = new List<Claim>
             {
