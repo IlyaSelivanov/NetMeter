@@ -9,7 +9,7 @@ namespace WebUI.Repository
     public class PlanRepository : IPlanRepository
     {
         private readonly IHttpService _httpService;
-        private string url = "api/plan";
+        private string url = "api/plan"; // const
 
         public PlanRepository(IHttpService httpService)
         {

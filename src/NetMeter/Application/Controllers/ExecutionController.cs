@@ -54,10 +54,10 @@ namespace Application.Controllers
             return Ok(execution);
         }
 
-        [HttpGet("AggregateResult/{id}")]
+        [HttpGet("AggregateResult/{id}")] // lowercase
         public async Task<IActionResult> GetAggregateResult(int id)
         {
-            var execution = await _executionRepository.Get(id);
+            var execution = await _executionRepository.Get(id); // it's better to use service here
 
             if (execution == null)
                 return NotFound();

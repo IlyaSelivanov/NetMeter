@@ -15,13 +15,13 @@ namespace Application.Services
 
         public string GetConnectionString(string name)
         {
-            Regex regex = new Regex(@"%(.*?)%");
+            Regex regex = new Regex(@"%(.*?)%"); // use var here
             string connString = _configuration.GetConnectionString(name);
 
             MatchCollection mc = regex.Matches(connString);
-            if (mc.Count != 0)
+            if (mc.Count != 0) // better to invert if/else
             {
-                foreach (Match m in mc)
+                foreach (Match m in mc) // give good names
                 {
                     var envVal = Environment.GetEnvironmentVariable(m.Value.Replace("%", ""));
                     if(envVal != null)

@@ -33,7 +33,7 @@ namespace WebUI.Services
             }
         }
 
-        public async Task<HttpResponseWrapper<object>> Post<T>(string url, T data)
+        public async Task<HttpResponseWrapper<object>> Post<T>(string url, T data) // similar to next Post
         {
             var dataJson = JsonSerializer.Serialize(data);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
