@@ -25,7 +25,8 @@ namespace Application.Services
 
         private RequestData _data;
 
-        public VirtualUser(Plan plan, 
+        public VirtualUser(
+            Plan plan, 
             Execution execution,
             IGenericRepository<Execution> executionRepository,
             IGenericRepository<Result> resultRepository,
