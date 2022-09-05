@@ -1,4 +1,4 @@
-namespace NMeter.Api.Plan.Models
+namespace NMeter.Api.Settings.Models
 {
     public class KeyValue
     {

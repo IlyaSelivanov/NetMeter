@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NMeter.Api.Plan.Models
+namespace NMeter.Api.Settings.Models
 {
-    public class PlanVariable
+    public class Profile
     {
         [Key]
         [Required]
         public int Id { get; set; }
 
-        [Required]
-        public KeyValue Variable { get; set; }
+        public int UsersNumber { get; set; }
+
+        public int Duration { get; set; }
 
         [Required]
         public int PlanId { get; set; }

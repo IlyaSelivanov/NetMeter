@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NMeter.Api.Plan.Models
+namespace NMeter.Api.Settings.Models
 {
-    public class Header
+    public class UrlParameter
     {
         [Key]
         [Required]
