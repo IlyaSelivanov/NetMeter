@@ -9,7 +9,10 @@ namespace NMeter.Api.Settings.Models
         public int Id { get; set; }
 
         [Required]
-        public KeyValue Value { get; set; }
+        public string Key { get; set; }
+
+        [Required]
+        public string Value { get; set; }
 
         [Required]
         public int StepId { get; set; }
