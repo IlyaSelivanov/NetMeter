@@ -9,6 +9,11 @@ namespace NMeter.Api.Settings.Models
         public int Id { get; set; }
 
         [Required]
+        [Range(0, int.MaxValue,
+            ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        public int Order { get; set; }
+
+        [Required]
         public string Path { get; set; }
 
         [Required]
