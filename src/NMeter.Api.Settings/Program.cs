@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using NMeter.Api.Settings.Data;
+using NMeter.Api.Settings.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +43,7 @@ else if (env.IsProduction())
 //     options.UseSqlServer(builder.Configuration.GetConnectionString("SettingsDb"));
 // });
 
-builder.Services.AddScoped<IPlanRepo, PlanRepo>();
+builder.Services.AddScoped(typeof(IRepository<Plan>), typeof(PlanRepo));
 
 var app = builder.Build();
 

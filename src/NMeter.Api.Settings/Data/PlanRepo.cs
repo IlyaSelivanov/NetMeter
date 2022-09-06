@@ -3,45 +3,35 @@ using NMeter.Api.Settings.Models;
 
 namespace NMeter.Api.Settings.Data
 {
-    public class PlanRepo : IPlanRepo
+    public class PlanRepo : GenericRepository<Plan>
     {
-        private readonly AppDbContext _context;
+        public PlanRepo(AppDbContext context) : base(context)
+        { }
 
-        public PlanRepo(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        public Task CreatPlanAsync(Plan plan)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeletePlanAsync(int planId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Plan> GetPlanByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Plan>> GetPlansAsync()
+        public override async Task<IEnumerable<Plan>> GetAllAsync()
         {
             var plans = await _context.Plans
                 .Include(p => p.Profile)
                 .Include(p => p.Variables)
                 .Include(p => p.Steps)
                 .AsSplitQuery()
+                .AsNoTracking()
                 .ToListAsync();
 
             return plans;
         }
 
-        public Task UpdatePlanAsync(int planId, Plan plan)
+        public override async Task<Plan> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var plan = await _context.Plans
+                .Include(p => p.Profile)
+                .Include(p => p.Variables)
+                .Include(p => p.Steps)
+                .AsSplitQuery()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return plan;
         }
     }
 }
