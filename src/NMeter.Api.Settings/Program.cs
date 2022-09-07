@@ -44,6 +44,7 @@ else if (env.IsProduction())
 // });
 
 builder.Services.AddScoped(typeof(IRepository<Plan>), typeof(PlanRepo));
+builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 
 var app = builder.Build();
 
