@@ -45,6 +45,7 @@ else if (env.IsProduction())
 
 builder.Services.AddScoped(typeof(IRepository<Plan>), typeof(PlanRepo));
 builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
+builder.Services.AddScoped<IPlanVariableRepo, PlanVariableRepo>();
 
 var app = builder.Build();
 
