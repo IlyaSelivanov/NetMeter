@@ -36,6 +36,7 @@ else if (env.IsProduction())
     });
 }
 
+// //This is used to setup database localy
 // Console.WriteLine($"--> Using SQL Server");
 
 // builder.Services.AddDbContext<AppDbContext>(options =>
@@ -46,6 +47,7 @@ else if (env.IsProduction())
 builder.Services.AddScoped(typeof(IRepository<Plan>), typeof(PlanRepo));
 builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 builder.Services.AddScoped<IPlanVariableRepo, PlanVariableRepo>();
+builder.Services.AddScoped<IStepRepo, StepRepo>();
 
 var app = builder.Build();
 
