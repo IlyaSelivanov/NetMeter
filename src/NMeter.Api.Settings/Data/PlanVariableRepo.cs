@@ -59,7 +59,8 @@ namespace NMeter.Api.Settings.Data
             if(planVariable == null)
                 throw new ArgumentNullException($"{typeof(PlanVariable)} {nameof(planVariable)} is null");
 
-            if(_context.Plans.Any(p => p.Id == planId))
+            if(await _context.Plans.AnyAsync(p => p.Id == planId)
+                && await _context.PlanVariables.AnyAsync(pv => pv.Id == planVariable.Id))
             {
                 planVariable.PlanId = planId;
                 _context.Entry(planVariable).State = EntityState.Modified;

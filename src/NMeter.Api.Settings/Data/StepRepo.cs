@@ -12,6 +12,7 @@ namespace NMeter.Api.Settings.Data
             _context = context;
         }
 
+        //TODO: init step order on creation
         public async Task<bool> CreatePlanStepAync(int planId, Step step)
         {
             if (step == null)
@@ -68,7 +69,8 @@ namespace NMeter.Api.Settings.Data
             if (step == null)
                 throw new ArgumentNullException($"{typeof(Step)} {nameof(step)} is null");
 
-            if(_context.Plans.Any(p => p.Id == planId))
+            if(await _context.Plans.AnyAsync(p => p.Id == planId)
+                && await _context.Steps.AnyAsync(s => s.Id == step.Id))
             {
                 step.PlanId = planId;
                 _context.Entry(step).State = EntityState.Modified;
