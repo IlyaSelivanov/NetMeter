@@ -14,6 +14,8 @@ namespace NMeter.Api.Settings.Data
 
         public DbSet<PlanVariable> PlanVariables { get; set; }
 
+        public DbSet<Execution> Executions { get; set; }
+
         public DbSet<Step> Steps { get; set; }
 
         public DbSet<Header> Headers { get; set; }
