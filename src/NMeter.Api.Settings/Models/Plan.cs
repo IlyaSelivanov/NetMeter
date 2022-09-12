@@ -16,6 +16,8 @@ namespace NMeter.Api.Settings.Models
 
         public Profile Profile { get; set; }
 
+        public ICollection<Execution> Executions { get; set; }
+
         public ICollection<PlanVariable> Variables { get; set; }
 
         public ICollection<Step> Steps { get; set; }

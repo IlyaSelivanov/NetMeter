@@ -36,6 +36,13 @@ namespace NMeter.Api.Settings.Data
                 .HasForeignKey(v => v.PlanId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //Plan m2o Execution
+            modelBuilder.Entity<Plan>()
+                .HasMany(p => p.Executions)
+                .WithOne(e => e.Plan)
+                .HasForeignKey(e => e.planId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             //Plan m2o Step
             modelBuilder.Entity<Plan>()
                 .HasMany(p => p.Steps)
