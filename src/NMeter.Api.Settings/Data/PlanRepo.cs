@@ -14,6 +14,9 @@ namespace NMeter.Api.Settings.Data
                 .Include(p => p.Profile)
                 .Include(p => p.Variables)
                 .Include(p => p.Steps)
+                    .ThenInclude(s => s.Headers)
+                .Include(p => p.Steps)
+                    .ThenInclude(s => s.Parameters)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .ToListAsync();
@@ -27,6 +30,9 @@ namespace NMeter.Api.Settings.Data
                 .Include(p => p.Profile)
                 .Include(p => p.Variables)
                 .Include(p => p.Steps)
+                    .ThenInclude(s => s.Headers)
+                .Include(p => p.Steps)
+                    .ThenInclude(s => s.Parameters)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == id);

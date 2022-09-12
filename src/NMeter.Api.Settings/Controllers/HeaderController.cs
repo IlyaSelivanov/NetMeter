@@ -28,22 +28,22 @@ namespace NMeter.Api.Settings.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Header>> CreateStepHeader(int stepId, Header header)
+        public async Task<ActionResult<Header>> CreateStepHeader(int planId, int stepId, Header header)
         {
             if (await _headerRepo.CreateStepHeaderAsync(stepId, header))
                 return CreatedAtRoute(nameof(GetStepHeader),
-                    new { stepId = stepId, headerId = header.Id },
+                    new {planId = planId, stepId = stepId, headerId = header.Id },
                     header);
 
             return NoContent();
         }
 
         [HttpPut]
-        public async Task<ActionResult<Header>> UpdateStepHeader(int stepId, Header header)
+        public async Task<ActionResult<Header>> UpdateStepHeader(int planId, int stepId, Header header)
         {
             if (await _headerRepo.UpdateStepHeaderAsync(stepId, header))
                 return CreatedAtRoute(nameof(GetStepHeader),
-                    new { stepId = stepId, headerId = header.Id },
+                    new {planId = planId, stepId = stepId, headerId = header.Id },
                     header);
 
             return NoContent();
