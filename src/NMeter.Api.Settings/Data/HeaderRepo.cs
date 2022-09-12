@@ -17,7 +17,7 @@ namespace NMeter.Api.Settings.Data
             if (header == null)
                 throw new ArgumentNullException($"{typeof(Header)} {nameof(header)} is null");
 
-            if (_context.Steps.Any(s => s.Id == stepId))
+            if (await _context.Steps.AnyAsync(s => s.Id == stepId))
             {
                 header.StepId = stepId;
                 await _context.Headers.AddAsync(header);
@@ -63,6 +63,7 @@ namespace NMeter.Api.Settings.Data
             if(await _context.Steps.AnyAsync(s => s.Id == stepId)
                 && await _context.Headers.AnyAsync(h => h.Id == header.Id))
             {
+                header.StepId = stepId;
                 _context.Entry(header).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
