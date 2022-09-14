@@ -14,10 +14,10 @@ namespace NMeter.Api.Settings.Data
 
         public async Task<bool> CreatePlanExecutionAsync(int planId, Execution execution)
         {
-            if(execution == null)
+            if (execution == null)
                 throw new ArgumentNullException($"{typeof(Execution)} {nameof(execution)} is null");
 
-            if(await _context.Plans.AnyAsync(p => p.Id == planId))
+            if (await _context.Plans.AnyAsync(p => p.Id == planId))
             {
                 await _context.Executions.AddAsync(execution);
                 await _context.SaveChangesAsync();
@@ -31,28 +31,44 @@ namespace NMeter.Api.Settings.Data
         public async Task DeletePlanExecutionAsync(int planId, int executionId)
         {
             var execution = await _context.Executions
-                .FirstOrDefaultAsync(e => e.Id == executionId && e.planId == planId);
-            
-            if(execution != null)
+                .FirstOrDefaultAsync(e => e.Id == executionId && e.PlanId == planId);
+
+            if (execution != null)
             {
                 _context.Executions.Remove(execution);
                 await _context.SaveChangesAsync();
             }
         }
 
-        public Task<IEnumerable<Execution>> GetAllPlanExecutionsAsync(int planId)
+        public async Task<IEnumerable<Execution>> GetAllPlanExecutionsAsync(int planId)
         {
-            throw new NotImplementedException();
+            return await _context.Executions
+                .Where(e => e.PlanId == planId)
+                .ToListAsync();
         }
 
-        public Task<Execution> GetPlanExecutionAsync(int planId, int executionId)
+        public async Task<Execution> GetPlanExecutionAsync(int planId, int executionId)
         {
-            throw new NotImplementedException();
+            return await _context.Executions
+                .FirstOrDefaultAsync(e => e.Id == executionId && e.PlanId == planId);
         }
 
-        public Task<bool> UpdatePlanExecutionAsync(int planId, Execution execution)
+        public async Task<bool> UpdatePlanExecutionAsync(int planId, Execution execution)
         {
-            throw new NotImplementedException();
+            if (execution == null)
+                throw new ArgumentNullException($"{typeof(Execution)} {nameof(execution)} is null");
+
+            if (await _context.Plans.AnyAsync(p => p.Id == planId) &&
+                await _context.Executions.AnyAsync(e => e.Id == execution.Id))
+            {
+                execution.PlanId = planId;
+                _context.Entry(execution).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

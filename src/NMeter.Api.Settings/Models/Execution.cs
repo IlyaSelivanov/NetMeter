@@ -12,7 +12,7 @@ namespace NMeter.Api.Settings.Models
         public ExecutionStatus Status { get; set; }
 
         [Required]
-        public int planId { get; set; }
+        public int PlanId { get; set; }
 
         public Plan Plan { get; set; }
     }
