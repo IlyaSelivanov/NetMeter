@@ -50,6 +50,7 @@ builder.Services.AddScoped<IPlanVariableRepo, PlanVariableRepo>();
 builder.Services.AddScoped<IStepRepo, StepRepo>();
 builder.Services.AddScoped<IHeaderRepo, HeaderRepo>();
 builder.Services.AddScoped<IStepParameterRepo, StepParameterRepo>();
+builder.Services.AddScoped<IExecutionRepo, ExecutionRepo>();
 
 var app = builder.Build();
 

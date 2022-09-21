@@ -19,6 +19,7 @@ namespace NMeter.Api.Settings.Data
 
             if (await _context.Plans.AnyAsync(p => p.Id == planId))
             {
+                execution.PlanId = planId;
                 await _context.Executions.AddAsync(execution);
                 await _context.SaveChangesAsync();
 
