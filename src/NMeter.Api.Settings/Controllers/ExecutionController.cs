@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using NMeter.Api.Settings.AsyncDataServices;
 using NMeter.Api.Settings.Data;
 using NMeter.Api.Settings.Models;
 
@@ -9,10 +10,16 @@ namespace NMeter.Api.Settings.Controllers
     public class ExecutionController : ControllerBase
     {
         private readonly IExecutionRepo _executionRepo;
+        private readonly IMessageBusClient _messageBusClient;
+        private readonly IRepository<Plan> _planRepo;
 
-        public ExecutionController(IExecutionRepo executionRepo)
+        public ExecutionController(IExecutionRepo executionRepo,
+            IRepository<Plan> planRepo,
+            IMessageBusClient messageBusClient)
         {
             _executionRepo = executionRepo;
+            _messageBusClient = messageBusClient;
+            _planRepo = planRepo;
         }
 
         [HttpGet]
@@ -30,10 +37,16 @@ namespace NMeter.Api.Settings.Controllers
         [HttpPost]
         public async Task<ActionResult<Execution>> CreatePlanExecution(int planId, Execution execution)
         {
-            if(await _executionRepo.CreatePlanExecutionAsync(planId, execution))
+            if (await _executionRepo.CreatePlanExecutionAsync(planId, execution))
+            {
+                var plan = await _planRepo.GetByIdAsync(planId);
+                var planExecution = new PlanExecution { Plan = plan, Execution = execution };
+                _messageBusClient.PublishPlanExecution(planExecution);
+
                 return CreatedAtRoute(nameof(GetPlanExecution),
-                    new {planId = planId, executionId = execution.Id},
+                    new { planId = planId, executionId = execution.Id },
                     execution);
+            }
 
             return NoContent();
         }
@@ -41,9 +54,9 @@ namespace NMeter.Api.Settings.Controllers
         [HttpPut]
         public async Task<ActionResult<Execution>> UpdatePlanExecution(int planId, Execution execution)
         {
-            if(await _executionRepo.UpdatePlanExecutionAsync(planId, execution))
+            if (await _executionRepo.UpdatePlanExecutionAsync(planId, execution))
                 return CreatedAtRoute(nameof(GetPlanExecution),
-                    new {planId = planId, executionId = execution.Id},
+                    new { planId = planId, executionId = execution.Id },
                     execution);
 
             return NoContent();

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using NMeter.Api.Settings.AsyncDataServices;
 using NMeter.Api.Settings.Data;
 using NMeter.Api.Settings.Models;
 
@@ -51,6 +52,8 @@ builder.Services.AddScoped<IStepRepo, StepRepo>();
 builder.Services.AddScoped<IHeaderRepo, HeaderRepo>();
 builder.Services.AddScoped<IStepParameterRepo, StepParameterRepo>();
 builder.Services.AddScoped<IExecutionRepo, ExecutionRepo>();
+
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 var app = builder.Build();
 
