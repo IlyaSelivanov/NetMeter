@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using NMeter.Api.Settings.Models;
 using RabbitMQ.Client;
 
@@ -24,10 +25,12 @@ namespace NMeter.Api.Settings.AsyncDataServices
 
         public void PublishPlanExecution(PlanExecution planExecution)
         {
-            var message = JsonSerializer.Serialize(planExecution, options: new JsonSerializerOptions()
+            var message = JsonSerializer.Serialize(planExecution,
+                options: new JsonSerializerOptions()
                 {
-                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles
                 });
+
             if (_connection.IsOpen)
             {
                 _logger.LogInformation("--> RqbbitMQ connection is open, sending a message.");
