@@ -1,5 +1,6 @@
 using System.Net.Http;
 using Microsoft.Net.Http.Headers;
+using NMeter.App.Runner.Models;
 
 namespace NMeter.App.Runner.Services
 {
@@ -22,11 +23,37 @@ namespace NMeter.App.Runner.Services
         {
             _logger.LogInformation("--> Starting Execution...");
 
-            while(!stoppingToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
-                var planExecution =  await _backgroundQueue.DequeueBackgroundItemAsync();
+                var planExecution = await _backgroundQueue.DequeueBackgroundItemAsync();
+
                 _logger.LogInformation($"--> Proceeding execution {planExecution.Execution.Id}.");
                 _logger.LogInformation($"--> Proceeding plan {planExecution.Plan.Id}.");
+
+                FireAndForget(planExecution);
+            }
+        }
+
+        private void FireAndForget(PlanExecution planExecution)
+        {
+            _logger.LogInformation($"--> Fire execution: {planExecution.Execution.Id}");
+
+            var plan = planExecution.Plan;
+            for (int i = 0; i < plan.Profile.UsersNumber; i++)
+            {
+                _logger.LogInformation($"--> USer-{i} is starting...");
+                Task.Run(async () =>
+                {
+                    var httpClient = _httpClientFactory.CreateClient();
+                    httpClient.BaseAddress = new Uri(plan.BaseUrl);
+
+                    foreach (var step in plan.Steps.OrderBy(s => s.Order))
+                    {
+                        var responseMessage = await httpClient.GetAsync(step.Path);
+                        // _logger.LogInformation($"--> User-{i}: {step.Path} - {responseMessage.StatusCode}");
+                    }
+                    _logger.LogInformation($"--> USer-{i} is finishing...");
+                });
             }
         }
 

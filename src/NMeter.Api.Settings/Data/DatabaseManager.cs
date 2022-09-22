@@ -46,7 +46,7 @@ namespace NMeter.Api.Settings.Data
             );
 
             context.Add(
-                new Profile { Id = 1, UsersNumber = 1, Duration = 10, PlanId = 1}
+                new Profile { Id = 1, UsersNumber = 10, Duration = 10, PlanId = 1}
             );
 
             context.AddRange(
