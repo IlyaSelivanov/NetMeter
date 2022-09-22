@@ -12,6 +12,7 @@ namespace NMeter.Api.Settings.Controllers
         private readonly IExecutionRepo _executionRepo;
         private readonly IMessageBusClient _messageBusClient;
         private readonly IRepository<Plan> _planRepo;
+        private readonly string PLAN_EXECUTION_PUBLISHED = "PlanExecution_Published";
 
         public ExecutionController(IExecutionRepo executionRepo,
             IRepository<Plan> planRepo,
@@ -41,6 +42,8 @@ namespace NMeter.Api.Settings.Controllers
             {
                 var plan = await _planRepo.GetByIdAsync(planId);
                 var planExecution = new PlanExecution { Plan = plan, Execution = execution };
+                planExecution.Event = PLAN_EXECUTION_PUBLISHED;
+
                 _messageBusClient.PublishPlanExecution(planExecution);
 
                 return CreatedAtRoute(nameof(GetPlanExecution),
