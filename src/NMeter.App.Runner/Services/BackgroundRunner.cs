@@ -20,12 +20,13 @@ namespace NMeter.App.Runner.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Starting Execution...");
+            _logger.LogInformation("--> Starting Execution...");
 
             while(!stoppingToken.IsCancellationRequested)
             {
-                var workItem =  await _backgroundQueue.DequeueBackgroundItemAsync();
-                workItem.ExecuteItem();
+                var planExecution =  await _backgroundQueue.DequeueBackgroundItemAsync();
+                _logger.LogInformation($"--> Proceeding execution {planExecution.Execution.Id}.");
+                _logger.LogInformation($"--> Proceeding plan {planExecution.Plan.Id}.");
             }
         }
 

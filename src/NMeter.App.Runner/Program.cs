@@ -5,6 +5,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddHttpClient();
         services.AddHostedService<BackgroundRunner>();
+        services.AddSingleton<IBackgroundQueue, BackgroundQueue>();
     })
     .Build();
 

@@ -1,10 +1,11 @@
 using System.Threading.Channels;
+using NMeter.App.Runner.Models;
 
 namespace NMeter.App.Runner.Services
 {
     public class BackgroundQueue : IBackgroundQueue
     {
-        private readonly Channel<HttpRequestItem> _queue;
+        private readonly Channel<PlanExecution> _queue;
 
         public BackgroundQueue(int capacity)
         {
@@ -13,15 +14,15 @@ namespace NMeter.App.Runner.Services
                 FullMode = BoundedChannelFullMode.Wait
             };
 
-            _queue = Channel.CreateBounded<HttpRequestItem>(options);
+            _queue = Channel.CreateBounded<PlanExecution>(options);
         }
 
-        public async ValueTask<HttpRequestItem> DequeueBackgroundItemAsync()
+        public async ValueTask<PlanExecution> DequeueBackgroundItemAsync()
         {
             return await _queue.Reader.ReadAsync();
         }
 
-        public async ValueTask QueueBackgroundItemAsync(HttpRequestItem item)
+        public async ValueTask QueueBackgroundItemAsync(PlanExecution item)
         {
             if(item == null)
                 throw new ArgumentNullException(nameof(item));
