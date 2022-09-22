@@ -4,7 +4,7 @@ namespace NMeter.App.Runner.Services
 {
     public class BackgroundQueue : IBackgroundQueue
     {
-        private readonly Channel<IExecutableItem> _queue;
+        private readonly Channel<HttpRequestItem> _queue;
 
         public BackgroundQueue(int capacity)
         {
@@ -13,15 +13,15 @@ namespace NMeter.App.Runner.Services
                 FullMode = BoundedChannelFullMode.Wait
             };
 
-            _queue = Channel.CreateBounded<IExecutableItem>(options);
+            _queue = Channel.CreateBounded<HttpRequestItem>(options);
         }
 
-        public async ValueTask<IExecutableItem> DequeueBackgroundItemAsync()
+        public async ValueTask<HttpRequestItem> DequeueBackgroundItemAsync()
         {
             return await _queue.Reader.ReadAsync();
         }
 
-        public async ValueTask QueueBackgroundItemAsync(IExecutableItem item)
+        public async ValueTask QueueBackgroundItemAsync(HttpRequestItem item)
         {
             if(item == null)
                 throw new ArgumentNullException(nameof(item));

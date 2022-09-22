@@ -6,20 +6,27 @@ namespace NMeter.App.Runner.Services
     public class BackgroundRunner : BackgroundService
     {
         private readonly ILogger<BackgroundRunner> _logger;
+        private readonly IBackgroundQueue _backgroundQueue;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public BackgroundRunner(ILogger<BackgroundRunner> logger,
+            IBackgroundQueue backgroundQueue,
             IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
+            _backgroundQueue = backgroundQueue;
             _httpClientFactory = httpClientFactory;
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Starting Execution...");
 
-            return OnGet();
+            while(!stoppingToken.IsCancellationRequested)
+            {
+                var workItem =  await _backgroundQueue.DequeueBackgroundItemAsync();
+                workItem.ExecuteItem();
+            }
         }
 
         public async Task OnGet()
