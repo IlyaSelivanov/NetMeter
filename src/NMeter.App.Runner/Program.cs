@@ -10,7 +10,6 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<MessageBusSubscriber>();
         services.AddSingleton<IBackgroundQueue>(ctx =>
         {
-
             int queueCapacity = 100;
             return new BackgroundQueue(queueCapacity);
         });
