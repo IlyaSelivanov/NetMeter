@@ -4,13 +4,15 @@ namespace NMeter.App.Runner.Interface
 {
     public interface IExecutionBuilder
     {
-        List<ExecutionThread> Threads { get; }
+        List<ExecutionStep> Steps { get; }
 
-        void AddTread(ExecutionThread thread);
+        void AddStep(ExecutionStep step);
+
+        IExecutionBuilder<T> UseData<T>();
     }
 
     public interface IExecutionBuilder<TData> : IExecutionBuilder
     {
-        IExecutionThreadBuilder<TData> CreateThread();
+        IExecutionStepBuilder<TData, TStep> Start<TStep>() where TStep : IExecutionStepBody;
     }
 }

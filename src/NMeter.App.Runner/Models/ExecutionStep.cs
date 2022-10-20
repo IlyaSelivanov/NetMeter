@@ -2,7 +2,7 @@ using NMeter.App.Runner.Interface;
 
 namespace NMeter.App.Runner.Models
 {
-    public abstract class ExecutionThreadStep
+    public abstract class ExecutionStep
     {
         public abstract Type BodyType { get; }
         
@@ -10,8 +10,8 @@ namespace NMeter.App.Runner.Models
         
     }
 
-    public class ExecutionThreadStep<TStepBody> : ExecutionThreadStep
-        where TStepBody : IExecutionThreadStepBody
+    public class ExecutionStep<TStepBody> : ExecutionStep
+        where TStepBody : IExecutionStepBody
     {
         public override Type BodyType => typeof(TStepBody);
     }

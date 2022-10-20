@@ -1,6 +1,6 @@
 namespace NMeter.App.Runner.Interface
 {
-    public interface IExecutionThreadStepBody
+    public interface IExecutionStepBody
     {
         Task RunAsync();
     }
