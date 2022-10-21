@@ -1,5 +1,6 @@
 using NMeter.App.Runner.Interface;
 using NMeter.App.Runner.Models;
+using NMeter.App.Runner.Steps;
 
 namespace NMeter.App.Runner.Services
 {
@@ -21,15 +22,15 @@ namespace NMeter.App.Runner.Services
 
         public virtual ExecutionDefenition Build(string id)
         {
-            var threads = new Dictionary<int, ExecutionStep>();
+            var steps = new Dictionary<int, ExecutionStep>();
 
             foreach (var thread in Steps)
-                threads.Add(thread.Id, thread);
+                steps.Add(thread.Id, thread);
 
             return new ExecutionDefenition
             {
                 Id = id,
-                Threads = threads
+                Steps = steps
             };
         }
     }
@@ -50,7 +51,19 @@ namespace NMeter.App.Runner.Services
 
         public IExecutionStepBuilder<TData, TStep> Start<TStep>() where TStep : IExecutionStepBody
         {
-            throw new NotImplementedException();
+            ExecutionStep<TStep> step = new ExecutionStep<TStep>();
+            AddStep(step);
+            return new ExecutionStepBuilder<TData, TStep>(this, step);
+        }
+
+        public IExecutionStepBuilder<TData, InlineStepBody> Start(
+            Func<IExecutionStepContext, ExecutionResult> body) 
+        {
+            InlineStep step = new InlineStep();
+            step.Body = body;
+            var stepBuilder = new ExecutionStepBuilder<TData, InlineStepBody>(this, step);
+            AddStep(step);
+            return stepBuilder;
         }
     }
 }
