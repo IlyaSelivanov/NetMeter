@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NMeter.Api.Settings", "NMeter.Api.Settings\NMeter.Api.Settings.csproj", "{52983163-7F75-4A77-A21F-88DC6220F73D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NMeter.App.Runner", "NMeter.App.Runner\NMeter.App.Runner.csproj", "{57307691-8FEF-4189-BC30-93C737DB8144}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52983163-7F75-4A77-A21F-88DC6220F73D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52983163-7F75-4A77-A21F-88DC6220F73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52983163-7F75-4A77-A21F-88DC6220F73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52983163-7F75-4A77-A21F-88DC6220F73D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57307691-8FEF-4189-BC30-93C737DB8144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57307691-8FEF-4189-BC30-93C737DB8144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57307691-8FEF-4189-BC30-93C737DB8144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57307691-8FEF-4189-BC30-93C737DB8144}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D3BC8FCF-B7A9-496A-9706-01184AA71B40}
+	EndGlobalSection
+EndGlobal

@@ -16,8 +16,8 @@ namespace NMeter.App.Runner.Services
             _step = step;
         }
 
-        public IExecutionBuilder<TData> ExecutionBuilder => throw new NotImplementedException();
+        public IExecutionBuilder<TData> ExecutionBuilder => _executionBuilder;
 
-        public ExecutionStep<TStepBody> Step => throw new NotImplementedException();
+        public ExecutionStep<TStepBody> Step => _step;
     }
 }
