@@ -8,14 +8,14 @@ namespace NMeter.App.Runner.EventProcessing
     public class EventProcessor : IEventProcessor
     {
         private readonly ILogger<EventProcessor> _logger;
-        private readonly IBackgroundQueue _backgroundQueue;
+        private readonly IExecutionQueue _executionQueue;
         private const string PLAN_EXECUTION_PUBLISHED = "PlanExecution_Published";
 
         public EventProcessor(ILogger<EventProcessor> logger,
-            IBackgroundQueue backgroundQueue)
+            IExecutionQueue executionQueue)
         {
             _logger = logger;
-            _backgroundQueue = backgroundQueue;
+            _executionQueue = executionQueue;
         }
 
         public async Task ProcessEvent(string message)
@@ -49,7 +49,7 @@ namespace NMeter.App.Runner.EventProcessing
                     ReferenceHandler = ReferenceHandler.IgnoreCycles
                 });
 
-            await _backgroundQueue.QueueBackgroundItemAsync(planExecution);
+            await _executionQueue.QueueBackgroundItemAsync(planExecution);
         }
 
         private EventType GetEventType(BusEvent @event)

@@ -3,11 +3,11 @@ using NMeter.App.Runner.Models;
 
 namespace NMeter.App.Runner.Services
 {
-    public class BackgroundQueue : IBackgroundQueue
+    public class ExecutionQueue : IExecutionQueue
     {
         private readonly Channel<PlanExecution> _queue;
 
-        public BackgroundQueue(int capacity)
+        public ExecutionQueue(int capacity)
         {
             var options = new BoundedChannelOptions(capacity)
             {
