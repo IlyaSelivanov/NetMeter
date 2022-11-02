@@ -15,5 +15,7 @@ namespace NMeter.Api.Settings.Models
         public int PlanId { get; set; }
 
         public Plan Plan { get; set; }
+
+        public ICollection<Result> Results { get; set; }
     }
 }

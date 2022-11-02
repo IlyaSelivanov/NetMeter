@@ -22,6 +22,8 @@ namespace NMeter.Api.Settings.Data
 
         public DbSet<UrlParameter> UrlParameters { get; set; }
 
+        public DbSet<Result> Results { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Plan o2o Profile
@@ -64,6 +66,13 @@ namespace NMeter.Api.Settings.Data
                 .HasMany(s => s.Parameters)
                 .WithOne(p => p.Step)
                 .HasForeignKey(p => p.StepId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Excution m2o Result
+            modelBuilder.Entity<Execution>()
+                .HasMany(e => e.Results)
+                .WithOne(r => r.Execution)
+                .HasForeignKey(r => r.ExecutionId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
