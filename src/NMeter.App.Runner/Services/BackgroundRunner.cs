@@ -27,13 +27,16 @@ namespace NMeter.App.Runner.Services
             while (!stoppingToken.IsCancellationRequested)
             {
                 var planExecution = await _executionQueue.DequeueBackgroundItemAsync();
+                var executionBuilder = new ExecutionBuilder(planExecution);
+                var executionInxtance = executionBuilder.CreateThreads().Build();
+                executionInxtance.RunExecution().Start();
 
-                _logger.LogInformation($"--> Proceeding execution {planExecution.Execution.Id}.");
-                _logger.LogInformation($"--> Proceeding plan {planExecution.Plan.Id}.");
-
-                FireAndForget(planExecution);
+                // _logger.LogInformation($"--> Proceeding execution {planExecution.Execution.Id}.");
+                // _logger.LogInformation($"--> Proceeding plan {planExecution.Plan.Id}.");
             }
         }
+
+
 
         private void FireAndForget(PlanExecution planExecution)
         {
