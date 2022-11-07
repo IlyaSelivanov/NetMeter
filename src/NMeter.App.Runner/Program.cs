@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NMeter.App.Runner.AsyncDataServices;
 using NMeter.App.Runner.Data;
 using NMeter.App.Runner.EventProcessing;
+using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Services;
 
 IHost host = Host.CreateDefaultBuilder(args)

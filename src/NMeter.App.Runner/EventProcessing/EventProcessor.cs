@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Models;
 using NMeter.App.Runner.Services;
 

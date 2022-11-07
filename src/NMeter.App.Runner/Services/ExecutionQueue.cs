@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Models;
 
 namespace NMeter.App.Runner.Services

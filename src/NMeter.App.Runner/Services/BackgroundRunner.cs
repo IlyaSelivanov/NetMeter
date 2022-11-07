@@ -1,5 +1,6 @@
 using System.Net.Http;
 using Microsoft.Net.Http.Headers;
+using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Models;
 
 namespace NMeter.App.Runner.Services
