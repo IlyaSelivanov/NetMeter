@@ -9,5 +9,9 @@ namespace NMeter.App.Runner.Data
         { }
         
         public DbSet<Plan> Plans { get; set; }
+
+        public DbSet<Execution> Executions { get; set; }
+
+        public DbSet<Result> Results { get; set; }
     }
 }
