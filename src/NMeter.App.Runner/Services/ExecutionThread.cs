@@ -8,7 +8,7 @@ namespace NMeter.App.Runner.Services
 
         public ThreadStatus Status { get; set; } = ThreadStatus.Ready;
 
-        public List<IStep> Steps { get; set; }
+        public List<IStep> Steps { get; set; } = new List<IStep>();
 
         public Task Start()
         {

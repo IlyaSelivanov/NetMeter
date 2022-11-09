@@ -4,14 +4,10 @@ namespace NMeter.App.Runner.Models
 {
     public class Execution
     {
-        [Key]
-        [Required]
         public int Id { get; set; }
 
-        [Required]
         public ExecutionStatus Status { get; set; }
 
-        [Required]
         public int PlanId { get; set; }
 
         public Plan Plan { get; set; }

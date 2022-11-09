@@ -4,7 +4,7 @@ namespace NMeter.App.Runner.Services
     {
         public string Id { get; set; }
 
-        public Dictionary<string, ExecutionThread> ExecutionThreads { get; set; }
+        public Dictionary<string, ExecutionThread> ExecutionThreads { get; set; } = new Dictionary<string, ExecutionThread>();
 
         public Task RunExecution()
         {

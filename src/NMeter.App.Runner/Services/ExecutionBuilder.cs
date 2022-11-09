@@ -36,6 +36,7 @@ namespace NMeter.App.Runner.Services
 
         public ExecutionInstance Build()
         {
+            _executionInstance.Id = _planExecution.Execution.Id.ToString();
             return _executionInstance;
         }
     }
