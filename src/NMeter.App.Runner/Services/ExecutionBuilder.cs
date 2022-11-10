@@ -5,12 +5,18 @@ namespace NMeter.App.Runner.Services
     public class ExecutionBuilder
     {
         private ExecutionInstance _executionInstance = new ExecutionInstance();
-
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<ExecutionBuilder> _logger;
         private readonly PlanExecution _planExecution;
 
-        public ExecutionBuilder(PlanExecution planExecution)
+        public ExecutionBuilder(IServiceProvider serviceProvider,
+            PlanExecution planExecution)
         {
+            _serviceProvider = serviceProvider;
             _planExecution = planExecution;
+            _logger = LoggerFactory
+                .Create(configure => configure.AddConsole())
+                .CreateLogger<ExecutionBuilder>();
         }
 
         public ExecutionBuilder CreateThreads()
@@ -22,7 +28,8 @@ namespace NMeter.App.Runner.Services
 
             for (int i = 0; i < usersNumber; i++)
             {
-                var executionThreadBuilder = new ExecutionThreadBuilder(_planExecution.Plan.Steps);
+                var executionThreadBuilder = new ExecutionThreadBuilder(_serviceProvider,
+                    _planExecution.Plan);
                 var executionThread = executionThreadBuilder
                     .SetId($"execution-{executionId}-thread-{i}")
                     .CreateSteps()

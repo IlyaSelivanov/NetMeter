@@ -7,14 +7,17 @@ namespace NMeter.App.Runner.Services
 {
     public class BackgroundRunner : BackgroundService
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<BackgroundRunner> _logger;
         private readonly IExecutionQueue _executionQueue;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public BackgroundRunner(ILogger<BackgroundRunner> logger,
+        public BackgroundRunner(IServiceProvider serviceProvider,
+            ILogger<BackgroundRunner> logger,
             IExecutionQueue executionQueue,
             IHttpClientFactory httpClientFactory)
         {
+            _serviceProvider = serviceProvider;
             _logger = logger;
             _executionQueue = executionQueue;
             _httpClientFactory = httpClientFactory;
@@ -27,7 +30,7 @@ namespace NMeter.App.Runner.Services
             while (!stoppingToken.IsCancellationRequested)
             {
                 var planExecution = await _executionQueue.DequeueBackgroundItemAsync();
-                var executionBuilder = new ExecutionBuilder(planExecution);
+                var executionBuilder = new ExecutionBuilder(_serviceProvider, planExecution);
                 var executionInxtance = executionBuilder.CreateThreads().Build();
                 executionInxtance.RunExecution().Start();
 
