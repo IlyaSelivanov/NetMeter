@@ -5,19 +5,19 @@ namespace NMeter.App.Runner.Services
 {
     public abstract class AbstractStep : IStep
     {
-        protected abstract void BeforeExecution();
+        protected abstract Task BeforeExecution();
 
-        protected abstract void AfterExecution();
+        protected abstract Task AfterExecution();
 
-        protected abstract void ExecuteStep();
+        protected abstract Task ExecuteStep();
 
-        public void Execute()
+        public async Task Execute()
         {
-            BeforeExecution();
+            await BeforeExecution();
 
-            ExecuteStep();
+            await ExecuteStep();
 
-            AfterExecution();
+            await AfterExecution();
         }
     }
 }

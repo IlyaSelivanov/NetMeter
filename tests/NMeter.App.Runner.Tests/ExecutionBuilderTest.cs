@@ -9,7 +9,6 @@ namespace NMeter.App.Runner.Tests;
 public class ExecutionBuilderTest
 {
     private readonly PlanExecution _planExecution = PlanExecutionData.GetData();
-
     private IServiceProvider _serviceProvider;
 
     public ExecutionBuilderTest()

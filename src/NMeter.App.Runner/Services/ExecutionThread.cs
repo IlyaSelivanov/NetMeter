@@ -10,16 +10,14 @@ namespace NMeter.App.Runner.Services
 
         public List<IStep> Steps { get; set; } = new List<IStep>();
 
-        public Task Start()
+        public async Task Start()
         {
             Status = ThreadStatus.InProgress;
 
             foreach(var step in Steps)
-                step.Execute();
+                await step.Execute();
 
             Status = ThreadStatus.Completed;
-
-            return Task.CompletedTask;
         }
     }
 

@@ -33,12 +33,14 @@ namespace NMeter.App.Runner.Services
             _httpClient.BaseAddress = baseUri;
         }
 
-        protected override void AfterExecution()
+        protected override Task AfterExecution()
         {
             _logger.LogInformation($"{nameof(AfterExecution)}");
+
+            return Task.CompletedTask;
         }
 
-        protected override void BeforeExecution()
+        protected override Task BeforeExecution()
         {
             _logger.LogInformation($"{nameof(BeforeExecution)}");
 
@@ -57,24 +59,30 @@ namespace NMeter.App.Runner.Services
                 case Method.DELETE:
                     _requestMessage.Method = HttpMethod.Delete;
                     break;
-                default: 
+                default:
                     break;
             };
-            _requestMessage.RequestUri = new Uri(_step.Path);
+            _requestMessage.RequestUri = _step.Path == string.Empty ? null : new Uri(_step.Path, UriKind.Relative);
             _step.Headers
                 .ToList()
                 .ForEach(item => _requestMessage.Headers.Add(item.Key, item.Value));
 
+            return Task.CompletedTask;
         }
 
-        protected override void ExecuteStep()
+        protected override async Task ExecuteStep()
         {
             _logger.LogInformation($"{nameof(ExecuteStep)}");
 
-            Task.Run(async () =>
+            try
             {
                 _responseMessage = await _httpClient.SendAsync(_requestMessage);
-            });
+                _logger.LogDebug(_responseMessage.StatusCode.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
     }
 }

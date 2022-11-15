@@ -16,7 +16,7 @@ namespace NMeter.App.Runner.Tests.Data
                     Profile = new Profile
                     {
                         Id = 1,
-                        UsersNumber = 1,
+                        UsersNumber = 2,
                         Duration = 0,
                         PlanId = 1
                     },
@@ -33,7 +33,7 @@ namespace NMeter.App.Runner.Tests.Data
                         new Step
                         {
                             Id = 2,
-                            Path = @"/search?q=dotnet+core",
+                            Path = @"/search",
                             Order = 0,
                             Method = Method.GET,
                             PlanId = 1

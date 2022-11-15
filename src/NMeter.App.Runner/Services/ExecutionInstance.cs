@@ -6,12 +6,17 @@ namespace NMeter.App.Runner.Services
 
         public Dictionary<string, ExecutionThread> ExecutionThreads { get; set; } = new Dictionary<string, ExecutionThread>();
 
-        public Task RunExecution()
+        public async Task RunExecution()
         {
-            foreach(var thread in ExecutionThreads)
-                Task.Run(() => thread.Value.Start());
-            
-            return Task.CompletedTask;
+            await Task.Run(async () =>
+            {
+                List<Task> tasks = new List<Task>();
+
+                foreach (var thread in ExecutionThreads)
+                    tasks.Add(thread.Value.Start());
+
+                await Task.WhenAll(tasks.ToArray());
+            });
         }
     }
 }

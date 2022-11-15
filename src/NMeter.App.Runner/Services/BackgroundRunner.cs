@@ -31,8 +31,8 @@ namespace NMeter.App.Runner.Services
             {
                 var planExecution = await _executionQueue.DequeueBackgroundItemAsync();
                 var executionBuilder = new ExecutionBuilder(_serviceProvider, planExecution);
-                var executionInxtance = executionBuilder.CreateThreads().Build();
-                executionInxtance.RunExecution().Start();
+                var executionInstance = executionBuilder.CreateThreads().Build();
+                await executionInstance.RunExecution();
 
                 // _logger.LogInformation($"--> Proceeding execution {planExecution.Execution.Id}.");
                 // _logger.LogInformation($"--> Proceeding plan {planExecution.Plan.Id}.");
