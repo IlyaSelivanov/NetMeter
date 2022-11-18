@@ -44,28 +44,7 @@ namespace NMeter.App.Runner.Services
         {
             _logger.LogInformation($"{nameof(BeforeExecution)}");
 
-            _requestMessage.Content = new ByteArrayContent(Encoding.UTF8.GetBytes(_step.Body));
-            switch (_step.Method)
-            {
-                case Method.GET:
-                    _requestMessage.Method = HttpMethod.Get;
-                    break;
-                case Method.POST:
-                    _requestMessage.Method = HttpMethod.Post;
-                    break;
-                case Method.PUT:
-                    _requestMessage.Method = HttpMethod.Put;
-                    break;
-                case Method.DELETE:
-                    _requestMessage.Method = HttpMethod.Delete;
-                    break;
-                default:
-                    break;
-            };
-            _requestMessage.RequestUri = _step.Path == string.Empty ? null : new Uri(_step.Path, UriKind.Relative);
-            _step.Headers
-                .ToList()
-                .ForEach(item => _requestMessage.Headers.Add(item.Key, item.Value));
+            _requestMessage = new HttpRequestMessageBuilder().Build(_step);
 
             return Task.CompletedTask;
         }
