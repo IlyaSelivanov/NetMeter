@@ -16,7 +16,7 @@ namespace NMeter.App.Runner.Tests.Data
                     Profile = new Profile
                     {
                         Id = 1,
-                        UsersNumber = 2,
+                        UsersNumber = 1,
                         Duration = 0,
                         PlanId = 1
                     },

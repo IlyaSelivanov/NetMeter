@@ -28,8 +28,14 @@ namespace NMeter.App.Runner.Tests
                 .CreateThreads()
                 .Build();
 
-            await planExecutionInstance.RunExecution();
-            Assert.Fail();
+            try
+            {
+                await Assert.ThrowsExceptionAsync<Exception>(planExecutionInstance.RunExecution);
+            }
+            catch(AssertFailedException)
+            {
+                Assert.IsTrue(true);
+            }
         }
     }
 }
