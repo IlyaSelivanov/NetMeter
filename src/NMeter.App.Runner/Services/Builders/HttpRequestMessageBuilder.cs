@@ -92,9 +92,9 @@ namespace NMeter.App.Runner.Services
         public HttpRequestMessage Build(Step step)
         {
             _ = SetMethod(step.Method)
-            .SetPathWithQuery(step.Path, step.Parameters)
-            .SetHeaders(step.Headers)
-            .SetContent(step.Body);
+                .SetPathWithQuery(step.Path, step.Parameters)
+                .SetHeaders(step.Headers)
+                .SetContent(step.Body);
 
             return _httpRequestMessage;
         }
