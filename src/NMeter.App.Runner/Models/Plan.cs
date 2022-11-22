@@ -12,6 +12,8 @@ namespace NMeter.App.Runner.Models
 
         public ICollection<Execution> Executions { get; set; }
 
+        public ICollection<PlanVariable> Variables { get; set; }
+
         public ICollection<Step> Steps { get; set; }
     }
 }
