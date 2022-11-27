@@ -33,7 +33,7 @@ else if (env.IsProduction())
 
     builder.Services.AddDbContext<AppDbContext>(options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SettingsDb"));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("NMeterDB"));
     });
 }
 
@@ -42,7 +42,7 @@ else if (env.IsProduction())
 
 // builder.Services.AddDbContext<AppDbContext>(options =>
 // {
-//     options.UseSqlServer(builder.Configuration.GetConnectionString("SettingsDb"));
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("NMeterDB"));
 // });
 
 builder.Services.AddScoped(typeof(IRepository<Plan>), typeof(PlanRepo));
