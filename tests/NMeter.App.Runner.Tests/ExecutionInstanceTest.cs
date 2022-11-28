@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Models;
 using NMeter.App.Runner.Services;
 using NMeter.App.Runner.Tests.Data;
@@ -17,6 +18,7 @@ namespace NMeter.App.Runner.Tests
             var serviceCollection = new ServiceCollection();
 
             serviceCollection.AddHttpClient();
+            serviceCollection.AddTransient<IPlanVariablesManager, PlanVariablesManager>();
 
             _serviceProvider = serviceProviderFactory.CreateServiceProvider(serviceCollection);
         }

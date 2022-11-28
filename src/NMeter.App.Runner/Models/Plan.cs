@@ -10,10 +10,10 @@ namespace NMeter.App.Runner.Models
 
         public Profile Profile { get; set; }
 
-        public ICollection<Execution> Executions { get; set; }
+        public ICollection<Execution> Executions { get; set; } = new List<Execution>();
 
-        public ICollection<PlanVariable> Variables { get; set; }
+        public ICollection<PlanVariable> Variables { get; set; } = new List<PlanVariable>();
 
-        public ICollection<Step> Steps { get; set; }
+        public ICollection<Step> Steps { get; set; } = new List<Step>();
     }
 }
