@@ -6,6 +6,6 @@ namespace NMeter.App.Runner.Interfaces
     public interface IPlanVariablesManager
     {
         void UpdateRequestData(ICollection<PlanGlobalVariable> planVariables, Step step);
-        void RefreshPlanVariables(HttpResponseMessage response, ICollection<PlanGlobalVariable> planVariables);
+        Task RefreshPlanVariablesAsync(HttpResponseMessage response, ICollection<PlanGlobalVariable> planVariables);
     }
 }

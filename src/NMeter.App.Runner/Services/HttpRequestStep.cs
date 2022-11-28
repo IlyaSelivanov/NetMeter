@@ -42,13 +42,11 @@ namespace NMeter.App.Runner.Services
             _httpClient.BaseAddress = baseUri;
         }
 
-        protected override Task AfterExecution()
+        protected override async Task AfterExecution()
         {
             _logger.LogInformation($"{nameof(AfterExecution)}");
 
-            _planVariablesManager.RefreshPlanVariables(_responseMessage, _planVariables);
-
-            return Task.CompletedTask;
+             await _planVariablesManager.RefreshPlanVariablesAsync(_responseMessage, _planVariables);
         }
 
         protected override Task BeforeExecution()
