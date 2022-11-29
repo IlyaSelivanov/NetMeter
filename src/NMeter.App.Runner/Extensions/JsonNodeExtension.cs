@@ -11,7 +11,7 @@ namespace NMeter.App.Runner.Extensions
                 jsonArray = jsonNode.AsArray();
                 return true;
             }
-            catch (InvalidOperationException)
+            catch (Exception)
             {
                 jsonArray = new JsonArray();
                 return false;

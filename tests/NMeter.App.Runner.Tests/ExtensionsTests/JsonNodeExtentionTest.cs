@@ -44,9 +44,19 @@ namespace NMeter.App.Runner.Tests
         public void TryGetJsonArray_Negative_Test()
         {
             var jsonNode = JsonNode.Parse(JSON);
-            bool result = false;
+            bool result = true;
 
             result = JsonNodeExtension.TryGetJsonArray(jsonNode, out JsonArray jsonArray);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void TryGetJsonArray_Negative_Null_Test()
+        {
+            bool result = true;
+
+            result = JsonNodeExtension.TryGetJsonArray(null, out JsonArray jsonArray);
 
             Assert.IsFalse(result);
         }
