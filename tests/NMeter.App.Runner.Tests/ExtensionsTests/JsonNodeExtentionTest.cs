@@ -60,5 +60,47 @@ namespace NMeter.App.Runner.Tests
 
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void GetNodeByPath_Positive_Test()
+        {
+            var jsonNode = JsonNode.Parse(JSON_ARRAY);
+            var path = @"$[0].str";
+
+            var node = JsonNodeExtension.GetNodeByPath(jsonNode, path);
+
+            Assert.IsNotNull(node);
+        }
+
+        [TestMethod]
+        public void GetNodeByPath_Negative_Test()
+        {
+            var jsonNode = JsonNode.Parse(JSON_ARRAY);
+            var path = @"$[2].str";
+
+            var node = JsonNodeExtension.GetNodeByPath(jsonNode, path);
+
+            Assert.IsNull(node);
+        }
+
+        [TestMethod]
+        public void GetNodeByPath_Negative_Input_Node_Null_Test()
+        {
+            var path = @"$[0].str";
+
+            var node = JsonNodeExtension.GetNodeByPath(null, path);
+
+            Assert.IsNull(node);
+        }
+
+        [TestMethod]
+        public void GetNodeByPath_Negative_Input_Path_Null_Test()
+        {
+            var jsonNode = JsonNode.Parse(JSON_ARRAY);
+
+            var node = JsonNodeExtension.GetNodeByPath(jsonNode, null);
+
+            Assert.IsNull(node);
+        }
     }
 }
