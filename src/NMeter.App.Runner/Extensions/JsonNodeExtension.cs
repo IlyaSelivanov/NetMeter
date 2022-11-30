@@ -51,5 +51,39 @@ namespace NMeter.App.Runner.Extensions
 
             return default;
         }
+
+        public static void AddUpdateJsonNode(this JsonNode jsonNode, KeyValuePair<string, object> valuePair)
+        {
+            jsonNode.AddUpdateJsonNode<string>(valuePair);
+        }
+
+        public static void AddUpdateJsonNode<T>(this JsonNode jsonNode, KeyValuePair<string, object> valuePair)
+        {
+            if (jsonNode is JsonArray)
+            {
+                foreach (var obj in jsonNode.AsArray())
+                    AddUpdateJsonNode<T>(obj, valuePair);
+            }
+            else
+            {
+                if (valuePair.Value is T)
+                {
+                    var val = (T)valuePair.Value;
+                    jsonNode[valuePair.Key] = JsonValue.Create(val);
+                }
+                else
+                {
+                    try
+                    {
+                        var val = (T)Convert.ChangeType(valuePair.Value, typeof(T));
+                        jsonNode[valuePair.Key] = JsonValue.Create(val);
+                    }
+                    catch (Exception)
+                    {
+                        jsonNode[valuePair.Key] = JsonValue.Create(default(T));
+                    }
+                }
+            }
+        }
     }
 }

@@ -38,6 +38,7 @@ namespace NMeter.App.Runner.Services
             catch (JsonException ex)
             {
                 _logger.LogError(ex.Message);
+                return;
             }
 
             foreach (var @var in planVariables)
@@ -52,6 +53,23 @@ namespace NMeter.App.Runner.Services
         }
 
         public void UpdateRequestData(ICollection<PlanGlobalVariable> planVariables, Step step)
+        {
+            UpdateHeaders(planVariables, step.Headers);
+            UpdateUrlParameters(planVariables, step.Parameters);
+            UpdateBody(planVariables, step.Body);
+        }
+
+        private void UpdateBody(ICollection<PlanGlobalVariable> planVariables, string body)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void UpdateUrlParameters(ICollection<PlanGlobalVariable> planVariables, ICollection<UrlParameter> parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void UpdateHeaders(ICollection<PlanGlobalVariable> planVariables, ICollection<Header> headers)
         {
             throw new NotImplementedException();
         }
