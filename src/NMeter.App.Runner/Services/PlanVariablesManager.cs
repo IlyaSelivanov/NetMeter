@@ -41,14 +41,14 @@ namespace NMeter.App.Runner.Services
                 return;
             }
 
-            foreach (var @var in planVariables)
+            foreach (var variable in planVariables)
             {
-                if (string.IsNullOrEmpty(@var.Expression))
+                if (string.IsNullOrEmpty(variable.Expression))
                     continue;
 
-                var node = jsonNode.GetNodeByPath(@var.Expression);
+                var node = jsonNode.GetNodeByPath(variable.Expression);
 
-                @var.Value = node == null ? string.Empty : node.ToString();
+                variable.Value = node == null ? string.Empty : node.ToString();
             }
         }
 
@@ -61,7 +61,28 @@ namespace NMeter.App.Runner.Services
 
         private void UpdateBody(ICollection<PlanGlobalVariable> planVariables, string body)
         {
-            throw new NotImplementedException();
+            if(planVariables == null || planVariables.Count == 0)
+                return;
+
+            if(string.IsNullOrEmpty(body))
+                return;
+
+            JsonNode jsonNode = null; 
+            
+            try
+            {
+                jsonNode = JsonNode.Parse(body);
+            }
+            catch(JsonException ex)
+            {
+                _logger.LogError(ex.Message);
+                return;
+            }
+
+            foreach(var variable in planVariables)
+                jsonNode.AddUpdateJsonNode(new KeyValuePair<string, object>(variable.Name, variable.Value));
+
+            
         }
 
         private void UpdateUrlParameters(ICollection<PlanGlobalVariable> planVariables, ICollection<UrlParameter> parameters)

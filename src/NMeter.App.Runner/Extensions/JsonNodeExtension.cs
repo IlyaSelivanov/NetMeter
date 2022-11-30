@@ -80,7 +80,7 @@ namespace NMeter.App.Runner.Extensions
                     }
                     catch (Exception)
                     {
-                        jsonNode[valuePair.Key] = JsonValue.Create(default(T));
+                        return;
                     }
                 }
             }
