@@ -22,7 +22,7 @@ namespace NMeter.App.Runner.Services
             if (response == null)
                 return;
 
-            if (planVariables == null || planVariables.Count == 0)
+            if (planVariables == null || !planVariables.Any())
                 return;
 
             JsonNode jsonNode = null;
@@ -61,38 +61,80 @@ namespace NMeter.App.Runner.Services
 
         private void UpdateBody(ICollection<PlanGlobalVariable> planVariables, string body)
         {
-            if(planVariables == null || planVariables.Count == 0)
+            if (planVariables == null || !planVariables.Any())
                 return;
 
-            if(string.IsNullOrEmpty(body))
+            if (string.IsNullOrEmpty(body))
                 return;
 
-            JsonNode jsonNode = null; 
-            
+            JsonNode jsonNode = null;
+
             try
             {
                 jsonNode = JsonNode.Parse(body);
             }
-            catch(JsonException ex)
+            catch (JsonException ex)
             {
                 _logger.LogError(ex.Message);
                 return;
             }
 
-            foreach(var variable in planVariables)
+            foreach (var variable in planVariables)
                 jsonNode.AddUpdateJsonNode(new KeyValuePair<string, object>(variable.Name, variable.Value));
 
-            
+
         }
 
         private void UpdateUrlParameters(ICollection<PlanGlobalVariable> planVariables, ICollection<UrlParameter> parameters)
         {
-            throw new NotImplementedException();
+            if (planVariables == null || !planVariables.Any())
+                return;
+
+            if (parameters == null || !parameters.Any())
+                return;
+
+            var intersect = parameters.Join(planVariables,
+                p => p.Key,
+                pv => pv.Name,
+                (p, pv) => new { p.Key, pv.Value });
+
+            if(intersect.Any())
+            {
+                foreach(var i in intersect)
+                {
+                    var parameter = parameters
+                        .Where(p=> p.Key.Equals(i.Key))
+                        .FirstOrDefault();
+
+                    parameter.Value = i.Value;
+                }
+            }
         }
 
         private void UpdateHeaders(ICollection<PlanGlobalVariable> planVariables, ICollection<Header> headers)
         {
-            throw new NotImplementedException();
+            if (planVariables == null || !planVariables.Any())
+                return;
+
+            if (headers == null || !headers.Any())
+                return;
+
+            var intersect = headers.Join(planVariables,
+                p => p.Key,
+                pv => pv.Name,
+                (p, pv) => new { p.Key, pv.Value });
+
+            if(intersect.Any())
+            {
+                foreach(var i in intersect)
+                {
+                    var parameter = headers
+                        .Where(p=> p.Key.Equals(i.Key))
+                        .FirstOrDefault();
+
+                    parameter.Value = i.Value;
+                }
+            }
         }
     }
 }
