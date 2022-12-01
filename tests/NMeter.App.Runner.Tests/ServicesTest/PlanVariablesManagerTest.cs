@@ -158,7 +158,9 @@ namespace NMeter.App.Runner.Tests
 
             planVariablesManager.UpdateRequestData(globalVariables, step);
 
-            Assert.Fail();
+            Assert.AreEqual("new_header", step.Headers.ElementAtOrDefault(0)?.Value);
+            Assert.AreEqual("new_parameter", step.Parameters.ElementAtOrDefault(0)?.Value);
+            Assert.IsTrue(step.Body.Equals(@"{""body"":""new_body""}"), step.Body);
         }
     }
 }
