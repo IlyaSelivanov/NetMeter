@@ -177,6 +177,24 @@ namespace NMeter.App.Runner.Tests
         }
 
         [TestMethod]
+        public void AddUpdateJsonNode_Dont_Add_Str_Positive_Test()
+        {
+            var expectedJson = @"
+            {
+                ""str"": ""str1"",
+                ""int"": 1,
+                ""arr"": []   
+            }
+            ";
+            var expectedJsonNode = JsonNode.Parse(expectedJson);
+            var jsonNode = JsonNode.Parse(JSON);
+
+            JsonNodeExtension.AddUpdateJsonNode<string>(jsonNode, new KeyValuePair<string, object>("new", "new"), false);
+
+            Assert.AreEqual(expectedJsonNode?.ToJsonString(), jsonNode?.ToJsonString());
+        }
+
+        [TestMethod]
         public void AddUpdateJsonNode_Update_Multiple_Positive_Test()
         {
             var expectedJson = @"
@@ -215,6 +233,42 @@ namespace NMeter.App.Runner.Tests
             var jsonNode = JsonNode.Parse(JSON);
 
             JsonNodeExtension.AddUpdateJsonNode<int>(jsonNode, new KeyValuePair<string, object>("int", "qwe"));
+
+            Assert.AreEqual(expectedJsonNode?.ToJsonString(), jsonNode?.ToJsonString());
+        }
+
+        [TestMethod]
+        public void UpdateJsonNode_Positive_Test()
+        {
+            var expectedJson = @"
+            {
+                ""str"": ""str_new"",
+                ""int"": 1,
+                ""arr"": []   
+            }
+            ";
+            var expectedJsonNode = JsonNode.Parse(expectedJson);
+            var jsonNode = JsonNode.Parse(JSON);
+
+            JsonNodeExtension.UpdateJsonNode(jsonNode, new KeyValuePair<string, object>("str", "str_new"));
+
+            Assert.AreEqual(expectedJsonNode?.ToJsonString(), jsonNode?.ToJsonString());
+        }
+
+        [TestMethod]
+        public void UpdateJsonNode_Negative_Test()
+        {
+            var expectedJson = @"
+            {
+                ""str"": ""str1"",
+                ""int"": 1,
+                ""arr"": []   
+            }
+            ";
+            var expectedJsonNode = JsonNode.Parse(expectedJson);
+            var jsonNode = JsonNode.Parse(JSON);
+
+            JsonNodeExtension.UpdateJsonNode(jsonNode, new KeyValuePair<string, object>("new", "new"));
 
             Assert.AreEqual(expectedJsonNode?.ToJsonString(), jsonNode?.ToJsonString());
         }

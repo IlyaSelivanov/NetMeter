@@ -56,22 +56,22 @@ namespace NMeter.App.Runner.Services
         {
             UpdateHeaders(planVariables, step.Headers);
             UpdateUrlParameters(planVariables, step.Parameters);
-            UpdateBody(planVariables, step.Body);
+            UpdateBody(planVariables, step);
         }
 
-        private void UpdateBody(ICollection<PlanGlobalVariable> planVariables, string body)
+        private void UpdateBody(ICollection<PlanGlobalVariable> planVariables, Step step)
         {
             if (planVariables == null || !planVariables.Any())
                 return;
 
-            if (string.IsNullOrEmpty(body))
+            if (string.IsNullOrEmpty(step.Body))
                 return;
 
             JsonNode jsonNode = null;
 
             try
             {
-                jsonNode = JsonNode.Parse(body);
+                jsonNode = JsonNode.Parse(step.Body);
             }
             catch (JsonException ex)
             {
@@ -80,9 +80,9 @@ namespace NMeter.App.Runner.Services
             }
 
             foreach (var variable in planVariables)
-                jsonNode.AddUpdateJsonNode(new KeyValuePair<string, object>(variable.Name, variable.Value));
+                jsonNode.UpdateJsonNode(new KeyValuePair<string, object>(variable.Name, variable.Value));
 
-
+            step.Body = jsonNode.ToJsonString();
         }
 
         private void UpdateUrlParameters(ICollection<PlanGlobalVariable> planVariables, ICollection<UrlParameter> parameters)

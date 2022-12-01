@@ -52,12 +52,20 @@ namespace NMeter.App.Runner.Extensions
             return default;
         }
 
+        public static void UpdateJsonNode(this JsonNode jsonNode, KeyValuePair<string, object> valuePair)
+        {
+            jsonNode.AddUpdateJsonNode<string>(valuePair, false);
+        }
+
         public static void AddUpdateJsonNode(this JsonNode jsonNode, KeyValuePair<string, object> valuePair)
         {
             jsonNode.AddUpdateJsonNode<string>(valuePair);
         }
 
-        public static void AddUpdateJsonNode<T>(this JsonNode jsonNode, KeyValuePair<string, object> valuePair)
+        public static void AddUpdateJsonNode<T>(
+            this JsonNode jsonNode,
+            KeyValuePair<string, object> valuePair,
+            bool addIfNotExists = true)
         {
             if (jsonNode is JsonArray)
             {
@@ -66,6 +74,9 @@ namespace NMeter.App.Runner.Extensions
             }
             else
             {
+                if (jsonNode[valuePair.Key] == null && !addIfNotExists)
+                    return;
+
                 if (valuePair.Value is T)
                 {
                     var val = (T)valuePair.Value;

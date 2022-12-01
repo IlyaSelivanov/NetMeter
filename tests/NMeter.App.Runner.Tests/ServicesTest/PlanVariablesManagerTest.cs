@@ -15,7 +15,7 @@ namespace NMeter.App.Runner.Tests
                 .Create(configure => configure.AddConsole())
                 .CreateLogger<PlanVariablesManager>();
             var planVariablesManager = new PlanVariablesManager(logger);
-            var httpResponseMessage = HttpResponseMessageData.GetData();
+            var httpResponseMessage = HttpResponseMessageData.GetRefreshData();
             var globalVariables = new List<PlanGlobalVariable>
             {
                 new PlanGlobalVariable
@@ -38,7 +38,7 @@ namespace NMeter.App.Runner.Tests
                 .Create(configure => configure.AddConsole())
                 .CreateLogger<PlanVariablesManager>();
             var planVariablesManager = new PlanVariablesManager(logger);
-            var httpResponseMessage = HttpResponseMessageData.GetData();
+            var httpResponseMessage = HttpResponseMessageData.GetRefreshData();
             var globalVariables = new List<PlanGlobalVariable>
             {
                 new PlanGlobalVariable
@@ -96,7 +96,7 @@ namespace NMeter.App.Runner.Tests
                 .Create(configure => configure.AddConsole())
                 .CreateLogger<PlanVariablesManager>();
             var planVariablesManager = new PlanVariablesManager(logger);
-            var httpResponseMessage = HttpResponseMessageData.GetData();
+            var httpResponseMessage = HttpResponseMessageData.GetRefreshData();
         
             try
             {
@@ -115,7 +115,7 @@ namespace NMeter.App.Runner.Tests
                 .Create(configure => configure.AddConsole())
                 .CreateLogger<PlanVariablesManager>();
             var planVariablesManager = new PlanVariablesManager(logger);
-            var httpResponseMessage = HttpResponseMessageData.GetData();
+            var httpResponseMessage = HttpResponseMessageData.GetRefreshData();
             var globalVariables = new List<PlanGlobalVariable>();
         
             try
@@ -126,6 +126,39 @@ namespace NMeter.App.Runner.Tests
             {
                 Assert.IsTrue(true);
             }
+        }
+
+        [TestMethod]
+        public void UpdateRequestData_Upate_All_Positive()
+        {
+            var logger = LoggerFactory
+                .Create(configure => configure.AddConsole())
+                .CreateLogger<PlanVariablesManager>();
+            var planVariablesManager = new PlanVariablesManager(logger);
+            var step = StepData.GetData();
+            var globalVariables = new List<PlanGlobalVariable>
+            {
+                new PlanGlobalVariable
+                {
+                    Name = "body",
+                    Value = "new_body",
+                    Expression = "$.body"
+                },
+                new PlanGlobalVariable
+                {
+                    Name = "header",
+                    Value = "new_header",
+                },
+                new PlanGlobalVariable
+                {
+                    Name = "parameter",
+                    Value = "new_parameter",
+                }
+            };
+
+            planVariablesManager.UpdateRequestData(globalVariables, step);
+
+            Assert.Fail();
         }
     }
 }
