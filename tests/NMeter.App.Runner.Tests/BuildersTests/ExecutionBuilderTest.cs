@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using NMeter.App.Runner.Data;
 using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Models;
 using NMeter.App.Runner.Services;
@@ -19,9 +21,15 @@ public class ExecutionBuilderTest
 
         serviceCollection.AddHttpClient();
         serviceCollection.AddTransient<IPlanVariablesManager, PlanVariablesManager>();
+        serviceCollection.AddDbContext<AppDbContext>(options =>
+        {
+            // options.UseSqlServer("Server=localhost, 1433;Initial Catalog=NMeterDB;User ID=;Password=;");
+            options.UseInMemoryDatabase("InMemoryDb");
+        });
+        serviceCollection.AddTransient<IResultRepository, ResultRepository>();
 
         _serviceProvider = serviceProviderFactory.CreateServiceProvider(serviceCollection);
-        
+
     }
 
     [TestMethod]
@@ -45,7 +53,7 @@ public class ExecutionBuilderTest
     {
         var planExecutionInstance = new ExecutionBuilder(_serviceProvider, _planExecution).CreateThreads().Build();
 
-        Assert.AreEqual(planExecutionInstance.ExecutionThreads.Count, 
+        Assert.AreEqual(planExecutionInstance.ExecutionThreads.Count,
             _planExecution.Plan.Profile.UsersNumber);
     }
 
@@ -54,7 +62,7 @@ public class ExecutionBuilderTest
     {
         var planExecutionInstance = new ExecutionBuilder(_serviceProvider, _planExecution).CreateThreads().Build();
 
-        Assert.AreEqual(planExecutionInstance.ExecutionThreads.FirstOrDefault().Value.Steps.Count, 
+        Assert.AreEqual(planExecutionInstance.ExecutionThreads.FirstOrDefault().Value.Steps.Count,
             _planExecution.Plan.Steps.Count);
     }
 }

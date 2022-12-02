@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using NMeter.App.Runner.Data;
 using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Models;
 using NMeter.App.Runner.Services;
@@ -19,6 +21,12 @@ namespace NMeter.App.Runner.Tests
 
             serviceCollection.AddHttpClient();
             serviceCollection.AddTransient<IPlanVariablesManager, PlanVariablesManager>();
+            serviceCollection.AddDbContext<AppDbContext>(options =>
+            {
+                // options.UseSqlServer("Server=localhost, 1433;Initial Catalog=NMeterDB;User ID=;Password=;");
+                options.UseInMemoryDatabase("InMemoryDb");
+            });
+            serviceCollection.AddTransient<IResultRepository, ResultRepository>();
 
             _serviceProvider = serviceProviderFactory.CreateServiceProvider(serviceCollection);
         }
@@ -34,7 +42,7 @@ namespace NMeter.App.Runner.Tests
             {
                 await Assert.ThrowsExceptionAsync<Exception>(planExecutionInstance.RunExecution);
             }
-            catch(AssertFailedException)
+            catch (AssertFailedException)
             {
                 Assert.IsTrue(true);
             }
