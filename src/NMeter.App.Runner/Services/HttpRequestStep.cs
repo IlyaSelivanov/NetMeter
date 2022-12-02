@@ -1,4 +1,5 @@
 using System.Text;
+using NMeter.App.Runner.Data;
 using NMeter.App.Runner.Interfaces;
 using NMeter.App.Runner.Models;
 using NMeter.App.Runner.Primitives;
@@ -9,6 +10,7 @@ namespace NMeter.App.Runner.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IPlanVariablesManager _planVariablesManager;
+        private readonly IResultRepository _resultRepository;
         private readonly ILogger<HttpRequestStep> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly Uri _baseUri;
@@ -29,11 +31,11 @@ namespace NMeter.App.Runner.Services
                 .Create(configure => configure.AddConsole())
                 .CreateLogger<HttpRequestStep>();
 
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                _httpClientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
-                _planVariablesManager = scope.ServiceProvider.GetRequiredService<IPlanVariablesManager>();
-            }
+            _httpClientFactory = _serviceProvider.GetRequiredService<IHttpClientFactory>();
+            _planVariablesManager = _serviceProvider.GetRequiredService<IPlanVariablesManager>();
+
+            var scope = _serviceProvider.CreateScope();
+            _resultRepository = scope.ServiceProvider.GetRequiredService<IResultRepository>();
 
             _baseUri = baseUri;
             _planVariables = planVariables;
@@ -46,7 +48,15 @@ namespace NMeter.App.Runner.Services
         {
             _logger.LogInformation($"{nameof(AfterExecution)}");
 
-             await _planVariablesManager.RefreshPlanVariablesAsync(_responseMessage, _planVariables);
+            await _planVariablesManager.RefreshPlanVariablesAsync(_responseMessage, _planVariables);
+
+            var result = new Result();
+            result.ResponseBody = await _responseMessage.Content.ReadAsStringAsync();
+            result.ResponseHeaders = _responseMessage.Headers.ToString();
+            result.ResponseCode = (int)_responseMessage.StatusCode;
+            result.ExecutionId = 1;
+
+            await _resultRepository.SaveResultAsync(result);
         }
 
         protected override Task BeforeExecution()

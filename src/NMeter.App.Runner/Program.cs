@@ -23,6 +23,7 @@ IHost host = Host.CreateDefaultBuilder(args)
             options.UseSqlServer(context.Configuration.GetConnectionString("NMeterDB"));
         });
         services.AddTransient<IPlanVariablesManager, PlanVariablesManager>();
+        services.AddScoped<IResultRepository, ResultRepository>();
     })
     .Build();
 
