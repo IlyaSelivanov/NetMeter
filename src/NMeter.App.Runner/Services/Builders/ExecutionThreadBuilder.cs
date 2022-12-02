@@ -6,12 +6,12 @@ namespace NMeter.App.Runner.Services
     public class ExecutionThreadBuilder
     {
         private ExecutionThread _executionThread = new ExecutionThread();
-        private readonly Plan _plan;
+        private readonly PlanExecution _planExecution;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ExecutionThreadBuilder> _logger;
 
         public ExecutionThreadBuilder(IServiceProvider serviceProvider,
-            Plan plan) : this(plan)
+            PlanExecution planExecution) : this(planExecution)
         {
             _serviceProvider = serviceProvider;
             _logger = LoggerFactory
@@ -21,9 +21,9 @@ namespace NMeter.App.Runner.Services
             _executionThread.PlanGlobalVariables = new List<PlanGlobalVariable>();
         }
 
-        public ExecutionThreadBuilder(Plan plan)
+        public ExecutionThreadBuilder(PlanExecution planExecution)
         {
-            _plan = plan;
+            _planExecution = planExecution;
         }
 
         public ExecutionThreadBuilder SetId(string id)
@@ -34,17 +34,17 @@ namespace NMeter.App.Runner.Services
 
         public ExecutionThreadBuilder CreateSteps()
         {
-            foreach (var variable in _plan.Variables)
+            foreach (var variable in _planExecution.Plan.Variables)
                 _executionThread.PlanGlobalVariables.Add(new PlanGlobalVariable
                 {
                     Name = variable.Key,
                     Expression = variable.Value
                 });
 
-            foreach (var step in _plan.Steps)
+            foreach (var step in _planExecution.Plan.Steps)
             {
                 _executionThread.Steps.Add(new HttpRequestStep(_serviceProvider,
-                    new Uri(_plan.BaseUrl),
+                    _planExecution,
                     _executionThread.PlanGlobalVariables,
                     step));
             }

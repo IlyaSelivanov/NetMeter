@@ -11,6 +11,7 @@ namespace NMeter.App.Runner.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly IPlanVariablesManager _planVariablesManager;
         private readonly IResultRepository _resultRepository;
+        private readonly PlanExecution _planExecution;
         private readonly ILogger<HttpRequestStep> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly Uri _baseUri;
@@ -22,7 +23,7 @@ namespace NMeter.App.Runner.Services
         private HttpResponseMessage _responseMessage;
 
         public HttpRequestStep(IServiceProvider serviceProvider,
-            Uri baseUri,
+            PlanExecution planExecution,
             ICollection<PlanGlobalVariable> planVariables,
             Step step)
         {
@@ -37,11 +38,11 @@ namespace NMeter.App.Runner.Services
             var scope = _serviceProvider.CreateScope();
             _resultRepository = scope.ServiceProvider.GetRequiredService<IResultRepository>();
 
-            _baseUri = baseUri;
+            _planExecution = planExecution;
             _planVariables = planVariables;
             _step = step;
             _httpClient = _httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = baseUri;
+            _httpClient.BaseAddress = new Uri(_planExecution.Plan.BaseUrl);
         }
 
         protected override async Task AfterExecution()
@@ -54,7 +55,7 @@ namespace NMeter.App.Runner.Services
             result.ResponseBody = await _responseMessage.Content.ReadAsStringAsync();
             result.ResponseHeaders = _responseMessage.Headers.ToString();
             result.ResponseCode = (int)_responseMessage.StatusCode;
-            result.ExecutionId = 1;
+            result.ExecutionId = _planExecution.Execution.Id;
 
             await _resultRepository.SaveResultAsync(result);
         }

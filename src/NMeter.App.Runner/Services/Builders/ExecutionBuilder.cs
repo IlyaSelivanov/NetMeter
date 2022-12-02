@@ -29,7 +29,7 @@ namespace NMeter.App.Runner.Services
             for (int i = 0; i < usersNumber; i++)
             {
                 var executionThreadBuilder = new ExecutionThreadBuilder(_serviceProvider,
-                    _planExecution.Plan);
+                    _planExecution);
                 var executionThread = executionThreadBuilder
                     .SetId($"execution-{executionId}-thread-{i}")
                     .CreateSteps()
