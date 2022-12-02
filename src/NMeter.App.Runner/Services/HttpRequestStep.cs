@@ -6,7 +6,7 @@ using NMeter.App.Runner.Primitives;
 
 namespace NMeter.App.Runner.Services
 {
-    public class HttpRequestStep : AbstractStep
+    public class HttpRequestStep : AbstractStep, IDisposable
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IPlanVariablesManager _planVariablesManager;
@@ -21,6 +21,7 @@ namespace NMeter.App.Runner.Services
         private HttpClient _httpClient;
         private HttpRequestMessage _requestMessage = new HttpRequestMessage();
         private HttpResponseMessage _responseMessage;
+        private IServiceScope _scope;
 
         public HttpRequestStep(IServiceProvider serviceProvider,
             PlanExecution planExecution,
@@ -35,14 +36,20 @@ namespace NMeter.App.Runner.Services
             _httpClientFactory = _serviceProvider.GetRequiredService<IHttpClientFactory>();
             _planVariablesManager = _serviceProvider.GetRequiredService<IPlanVariablesManager>();
 
-            var scope = _serviceProvider.CreateScope();
-            _resultRepository = scope.ServiceProvider.GetRequiredService<IResultRepository>();
+            _scope = _serviceProvider.CreateScope();
+            _resultRepository = _scope.ServiceProvider.GetRequiredService<IResultRepository>();
 
             _planExecution = planExecution;
             _planVariables = planVariables;
             _step = step;
             _httpClient = _httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri(_planExecution.Plan.BaseUrl);
+        }
+
+        public void Dispose()
+        {
+            _logger.LogDebug("Disposing");
+            _scope.Dispose();
         }
 
         protected override async Task AfterExecution()
