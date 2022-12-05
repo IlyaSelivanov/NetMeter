@@ -4,6 +4,8 @@ namespace NMeter.App.Runner.Interfaces
 {
     public interface IStep
     {
+        public int Order { get; set; }
+
         Task Execute();
     }
 }

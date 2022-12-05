@@ -5,6 +5,8 @@ namespace NMeter.App.Runner.Services
 {
     public abstract class AbstractStep : IStep
     {
+        public int Order { get ; set; }
+
         protected abstract Task BeforeExecution();
 
         protected abstract Task AfterExecution();

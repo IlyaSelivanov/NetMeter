@@ -46,6 +46,8 @@ namespace NMeter.App.Runner.Services
             _step = step;
             _httpClient = _httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri(_planExecution.Plan.BaseUrl);
+
+            Order = _step.Order;
         }
 
         public void Dispose()
