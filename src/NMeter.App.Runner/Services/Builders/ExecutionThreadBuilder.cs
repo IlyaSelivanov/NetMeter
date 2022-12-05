@@ -54,6 +54,9 @@ namespace NMeter.App.Runner.Services
 
         public ExecutionThread Build()
         {
+            if(_executionThread is TimedExecutionThread)
+                (_executionThread as TimedExecutionThread).Duration = _planExecution.Plan.Profile.Duration;
+
             return _executionThread;
         }
     }
