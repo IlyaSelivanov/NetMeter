@@ -28,13 +28,7 @@ namespace NMeter.App.Runner.Services
 
             for (int i = 0; i < usersNumber; i++)
             {
-                var executionThreadBuilder = new ExecutionThreadBuilder<SingleExecutionThread>(_serviceProvider,
-                    _planExecution);
-                var executionThread = executionThreadBuilder
-                    .SetId($"execution-{executionId}-thread-{i}")
-                    .CreateSteps()
-                    .Build();
-                    
+                var executionThread = CrateExecutionThread(i);
                 _executionInstance.ExecutionThreads.Add(executionThread.Id, executionThread);
             }
 
@@ -45,6 +39,28 @@ namespace NMeter.App.Runner.Services
         {
             _executionInstance.Id = _planExecution.Execution.Id.ToString();
             return _executionInstance;
+        }
+
+        private ExecutionThread CrateExecutionThread(int i)
+        {
+            var executionId = _planExecution.Execution.Id;
+            var duration = _planExecution.Plan.Profile.Duration;
+
+            if (duration == 0)
+            {
+                return new SingleExecutionThreadBuilder(_serviceProvider, _planExecution)
+                        .SetId($"execution-{executionId}-thread-{i}")
+                        .CreateSteps()
+                        .Build();
+            }
+            else
+            {
+                return new TimedExecutionThreadBuilder(_serviceProvider, _planExecution)
+                        .SetDuration(duration)
+                        .SetId($"execution-{executionId}-thread-{i}")
+                        .CreateSteps()
+                        .Build();
+            }
         }
     }
 }

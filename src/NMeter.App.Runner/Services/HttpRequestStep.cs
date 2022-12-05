@@ -15,7 +15,6 @@ namespace NMeter.App.Runner.Services
         private readonly PlanExecution _planExecution;
         private readonly ILogger<HttpRequestStep> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly Uri _baseUri;
         private readonly ICollection<PlanGlobalVariable> _planVariables;
         private readonly Step _step;
 

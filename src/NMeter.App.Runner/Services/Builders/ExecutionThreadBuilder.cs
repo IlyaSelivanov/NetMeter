@@ -3,36 +3,34 @@ using NMeter.App.Runner.Primitives;
 
 namespace NMeter.App.Runner.Services
 {
-    public class ExecutionThreadBuilder<T> where T: ExecutionThread, new()
+    public abstract class ExecutionThreadBuilder<TThread, TBuilder>
+        where TThread : ExecutionThread, new()
+        where TBuilder : ExecutionThreadBuilder<TThread, TBuilder>
     {
-        private ExecutionThread _executionThread = new T();
-        private readonly PlanExecution _planExecution;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<ExecutionThreadBuilder<T>> _logger;
+        protected ExecutionThread _executionThread = new TThread();
+        protected readonly PlanExecution _planExecution;
+        protected readonly IServiceProvider _serviceProvider;
+        protected readonly ILogger<ExecutionThreadBuilder<TThread, TBuilder>> _logger;
 
         public ExecutionThreadBuilder(IServiceProvider serviceProvider,
-            PlanExecution planExecution) : this(planExecution)
+            PlanExecution planExecution)
         {
             _serviceProvider = serviceProvider;
+            _planExecution = planExecution;
             _logger = LoggerFactory
                 .Create(configure => configure.AddConsole())
-                .CreateLogger<ExecutionThreadBuilder<T>>();
+                .CreateLogger<ExecutionThreadBuilder<TThread, TBuilder>>();
 
             _executionThread.PlanGlobalVariables = new List<PlanGlobalVariable>();
         }
 
-        public ExecutionThreadBuilder(PlanExecution planExecution)
-        {
-            _planExecution = planExecution;
-        }
-
-        public ExecutionThreadBuilder<T> SetId(string id)
+        public TBuilder SetId(string id)
         {
             _executionThread.Id = id;
-            return this;
+            return (TBuilder)this;
         }
 
-        public ExecutionThreadBuilder<T> CreateSteps()
+        public TBuilder CreateSteps()
         {
             foreach (var variable in _planExecution.Plan.Variables)
                 _executionThread.PlanGlobalVariables.Add(new PlanGlobalVariable
@@ -49,15 +47,9 @@ namespace NMeter.App.Runner.Services
                     step));
             }
 
-            return this;
+            return (TBuilder)this;
         }
 
-        public ExecutionThread Build()
-        {
-            if(_executionThread is TimedExecutionThread)
-                (_executionThread as TimedExecutionThread).Duration = _planExecution.Plan.Profile.Duration;
-
-            return _executionThread;
-        }
+        public abstract ExecutionThread Build();
     }
 }
