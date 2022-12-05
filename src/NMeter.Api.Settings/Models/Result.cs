@@ -15,6 +15,8 @@ namespace NMeter.Api.Settings.Models
 
         public string ResponseHeaders { get; set; }
 
+        public long ResponseTime { get; set; }
+
         public int StepId { get; set; }
 
         [Required]

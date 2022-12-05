@@ -12,6 +12,8 @@ namespace NMeter.App.Runner.Models
 
         public string ResponseHeaders { get; set; }
 
+        public long ResponseTime { get; set; }
+
         public int StepId { get; set; }
 
         public int ExecutionId { get; set; }

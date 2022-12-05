@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using NMeter.App.Runner.Data;
 using NMeter.App.Runner.Interfaces;
@@ -22,6 +23,7 @@ namespace NMeter.App.Runner.Services
         private HttpRequestMessage _requestMessage = new HttpRequestMessage();
         private HttpResponseMessage _responseMessage;
         private IServiceScope _scope;
+        private Stopwatch _watch = new Stopwatch();
 
         public HttpRequestStep(IServiceProvider serviceProvider,
             PlanExecution planExecution,
@@ -62,6 +64,8 @@ namespace NMeter.App.Runner.Services
             result.ResponseBody = await _responseMessage.Content.ReadAsStringAsync();
             result.ResponseHeaders = _responseMessage.Headers.ToString();
             result.ResponseCode = (int)_responseMessage.StatusCode;
+            result.ResponseTime = _watch.ElapsedMilliseconds;
+            result.StepId = _step.Id;
             result.ExecutionId = _planExecution.Execution.Id;
 
             await _resultRepository.SaveResultAsync(result);
@@ -73,6 +77,7 @@ namespace NMeter.App.Runner.Services
 
             _planVariablesManager.UpdateRequestData(_planVariables, _step);
             _requestMessage = new HttpRequestMessageBuilder().Build(_step);
+            _watch.Reset();
 
             return Task.CompletedTask;
         }
@@ -83,7 +88,9 @@ namespace NMeter.App.Runner.Services
 
             try
             {
+                _watch.Start();
                 _responseMessage = await _httpClient.SendAsync(_requestMessage);
+                _watch.Stop();
                 _logger.LogDebug(_responseMessage.StatusCode.ToString());
             }
             catch (Exception ex)
