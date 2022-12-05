@@ -3,7 +3,7 @@ using NMeter.App.Runner.Primitives;
 
 namespace NMeter.App.Runner.Services
 {
-    public class ExecutionThread
+    public abstract class ExecutionThread
     {
         public string Id { get; set; }
 
@@ -13,15 +13,7 @@ namespace NMeter.App.Runner.Services
 
         public ICollection<PlanGlobalVariable> PlanGlobalVariables { get; set; }
 
-        public async Task Start()
-        {
-            Status = ThreadStatus.InProgress;
-
-            foreach(var step in Steps)
-                await step.Execute();
-
-            Status = ThreadStatus.Completed;
-        }
+        public abstract Task Start();
     }
 
     public enum ThreadStatus

@@ -3,12 +3,12 @@ using NMeter.App.Runner.Primitives;
 
 namespace NMeter.App.Runner.Services
 {
-    public class ExecutionThreadBuilder
+    public class ExecutionThreadBuilder<T> where T: ExecutionThread, new()
     {
-        private ExecutionThread _executionThread = new ExecutionThread();
+        private ExecutionThread _executionThread = new T();
         private readonly PlanExecution _planExecution;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<ExecutionThreadBuilder> _logger;
+        private readonly ILogger<ExecutionThreadBuilder<T>> _logger;
 
         public ExecutionThreadBuilder(IServiceProvider serviceProvider,
             PlanExecution planExecution) : this(planExecution)
@@ -16,7 +16,7 @@ namespace NMeter.App.Runner.Services
             _serviceProvider = serviceProvider;
             _logger = LoggerFactory
                 .Create(configure => configure.AddConsole())
-                .CreateLogger<ExecutionThreadBuilder>();
+                .CreateLogger<ExecutionThreadBuilder<T>>();
 
             _executionThread.PlanGlobalVariables = new List<PlanGlobalVariable>();
         }
@@ -26,13 +26,13 @@ namespace NMeter.App.Runner.Services
             _planExecution = planExecution;
         }
 
-        public ExecutionThreadBuilder SetId(string id)
+        public ExecutionThreadBuilder<T> SetId(string id)
         {
             _executionThread.Id = id;
             return this;
         }
 
-        public ExecutionThreadBuilder CreateSteps()
+        public ExecutionThreadBuilder<T> CreateSteps()
         {
             foreach (var variable in _planExecution.Plan.Variables)
                 _executionThread.PlanGlobalVariables.Add(new PlanGlobalVariable
