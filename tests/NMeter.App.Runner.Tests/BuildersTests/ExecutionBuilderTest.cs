@@ -23,7 +23,7 @@ public class ExecutionBuilderTest
         serviceCollection.AddTransient<IPlanVariablesManager, PlanVariablesManager>();
         serviceCollection.AddDbContext<AppDbContext>(options =>
         {
-            // options.UseSqlServer("Server=localhost, 1433;Initial Catalog=NMeterDB;User ID=;Password=;");
+            //options.UseSqlServer("Server=localhost, 1433;Initial Catalog=NMeterDB;User ID=;Password=;");
             options.UseInMemoryDatabase("InMemoryDb");
         });
         serviceCollection.AddTransient<IResultRepository, ResultRepository>();
@@ -64,5 +64,39 @@ public class ExecutionBuilderTest
 
         Assert.AreEqual(planExecutionInstance.ExecutionThreads.FirstOrDefault().Value.Steps.Count,
             _planExecution.Plan.Steps.Count);
+    }
+
+    [TestMethod]
+    public void Build_Single_Execution_Positive_Test()
+    {
+        var planExecutionInstance = new ExecutionBuilder(_serviceProvider, _planExecution).CreateThreads().Build();
+
+        var executionThread = planExecutionInstance.ExecutionThreads.FirstOrDefault().Value;
+        var type = executionThread.GetType();
+
+        Assert.AreEqual(typeof(SingleExecutionThread), type);
+    }
+
+    [TestMethod]
+    public void Build_Timed_Execution_Positive_Test()
+    {
+        var planExecution = PlanExecutionData.GetTimedData();
+        var planExecutionInstance = new ExecutionBuilder(_serviceProvider, planExecution).CreateThreads().Build();
+
+        var executionThread = planExecutionInstance.ExecutionThreads.FirstOrDefault().Value;
+        var type = executionThread.GetType();
+
+        Assert.AreEqual(typeof(TimedExecutionThread), type);
+    }
+
+    [TestMethod]
+    public void Build_Timed_Execution_Duration_Positive_Test()
+    {
+        var planExecution = PlanExecutionData.GetTimedData();
+        var planExecutionInstance = new ExecutionBuilder(_serviceProvider, planExecution).CreateThreads().Build();
+
+        var executionThread = (TimedExecutionThread)planExecutionInstance.ExecutionThreads.FirstOrDefault().Value;
+
+        Assert.AreEqual(planExecution.Plan.Profile.Duration, executionThread.Duration);
     }
 }

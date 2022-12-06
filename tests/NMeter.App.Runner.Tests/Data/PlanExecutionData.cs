@@ -48,5 +48,50 @@ namespace NMeter.App.Runner.Tests.Data
                 }
             };
         }
+
+        public static PlanExecution GetTimedData()
+        {
+            return new PlanExecution
+            {
+                Plan = new Plan
+                {
+                    Id = 1,
+                    Name = "Test Plan #1",
+                    BaseUrl = @"https://www.google.com",
+                    Profile = new Profile
+                    {
+                        Id = 1,
+                        UsersNumber = 1,
+                        Duration = 5,
+                        PlanId = 1
+                    },
+                    Steps = new List<Step>
+                    {
+                        new Step
+                        {
+                            Id = 1,
+                            Path = @"/",
+                            Order = 0,
+                            Method = Method.GET,
+                            PlanId = 1
+                        },
+                        new Step
+                        {
+                            Id = 2,
+                            Path = @"/search",
+                            Order = 0,
+                            Method = Method.GET,
+                            PlanId = 1
+                        }
+                    }
+                },
+                Execution = new Execution
+                {
+                    Id = 1,
+                    Status = ExecutionStatus.New,
+                    PlanId = 1
+                }
+            };
+        }
     }
 }

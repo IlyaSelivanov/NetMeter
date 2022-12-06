@@ -12,8 +12,11 @@ namespace NMeter.App.Runner.Services
         {
             Status = ThreadStatus.InProgress;
 
-            var timer = new System.Timers.Timer((double)TimeSpan.FromSeconds(Duration).Milliseconds);
+            var interval = (double)(TimeSpan.FromSeconds(Duration).TotalMilliseconds);
+            var timer = new System.Timers.Timer(interval);
             timer.Elapsed += Timer_Elapsed;
+
+            timer.Start();
 
             while (!_isElapsed)
             {
