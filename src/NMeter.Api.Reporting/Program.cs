@@ -1,7 +1,7 @@
+using GraphQL.Server.Ui.Voyager;
 using Microsoft.EntityFrameworkCore;
 using NMeter.Api.Reporting.Data;
 using NMeter.Api.Reporting.GraphQL;
-using NMeter.Api.Reporting.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,5 +15,6 @@ builder.Services
 var app = builder.Build();
 
 app.MapGraphQL();
+app.UseGraphQLVoyager();
 
 await app.RunAsync();
