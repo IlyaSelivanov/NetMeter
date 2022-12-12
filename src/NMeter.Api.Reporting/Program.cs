@@ -21,6 +21,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("RedisUrl")
 );
 
+builder.Services.AddTransient<IResultRepository, ResultRepository>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
