@@ -1,17 +1,21 @@
-using GraphQL.Server.Ui.Voyager;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using NMeter.Api.Reporting.Data;
-using NMeter.Api.Reporting.GraphQL;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NMeterDB"))
 );
-
-builder.Services
-    .AddGraphQLServer()
-    .AddQueryType<Query>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("RedisUrl")
@@ -19,7 +23,16 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 var app = builder.Build();
 
-app.MapGraphQL();
-app.UseGraphQLVoyager(path: "/graphql-voyager");
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 await app.RunAsync();
