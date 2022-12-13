@@ -6,13 +6,13 @@ namespace NMeter.Api.Reporting.Models
 
         public int SuccessAmount { get; set; }
 
-        public int SuccessPercentage { get; set; }
+        public double SuccessPercentage { get; set; }
 
         public long MinResponseTime { get; set; }
 
         public long MaxResponseTime { get; set; }
 
-        public long AvgResponseTime { get; set; }
+        public double AvgResponseTime { get; set; }
 
         public required PagedResults PagedResults { get; set; }
     }

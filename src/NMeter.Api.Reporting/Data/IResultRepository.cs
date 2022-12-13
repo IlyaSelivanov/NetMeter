@@ -13,5 +13,7 @@ namespace NMeter.Api.Reporting.Data
         long GetMinSuccessResponseTime(int executionId);
 
         long GetMaxSuccessResponseTime(int executionId);
+
+        double GetAvgSuccessResponseTime(int executionId);
     }
 }

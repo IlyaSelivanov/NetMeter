@@ -39,19 +39,25 @@ namespace NMeter.Api.Reporting.Data
         public long GetMaxSuccessResponseTime(int executionId)
         {
             return _context.Results
-                .Where(r => r.ExecutionId == executionId
-                    && r.ResponseCode == 200)
-                .MaxBy(r => r.ResponseTime)
-                ?.ResponseTime ?? 0L;
+                .Where(r => r.ExecutionId == executionId && r.ResponseCode == 200)
+                .Select(r => r.ResponseTime)
+                .Max();
         }
 
         public long GetMinSuccessResponseTime(int executionId)
         {
             return _context.Results
-                .Where(r => r.ExecutionId == executionId
-                    && r.ResponseCode == 200)
-                .MinBy(r => r.ResponseTime)
-                ?.ResponseTime ?? 0L;
+                .Where(r => r.ExecutionId == executionId && r.ResponseCode == 200)
+                .Select(r => r.ResponseTime)
+                .Min();
+        }
+
+        public double GetAvgSuccessResponseTime(int executionId)
+        {
+            return _context.Results
+                .Where(r => r.ExecutionId == executionId && r.ResponseCode == 200)
+                .Select(r => r.ResponseTime)
+                .Average();
         }
     }
 }

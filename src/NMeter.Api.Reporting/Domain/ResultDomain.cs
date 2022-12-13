@@ -43,14 +43,16 @@ namespace NMeter.Api.Reporting.Domain
                 var successAmount = _resultRepository.GetExecutionSuccessAmount(executionId);
                 var minResponseTime = _resultRepository.GetMinSuccessResponseTime(executionId);
                 var maxResponseTime = _resultRepository.GetMaxSuccessResponseTime(executionId);
+                var avgResponseTime = _resultRepository.GetAvgSuccessResponseTime(executionId);
 
                 return new ExecutionResult
                 {
                     TotalRequestsAmount = totalRequestsAmount,
                     SuccessAmount = successAmount,
-                    SuccessPercentage = successAmount / totalRequestsAmount,
+                    SuccessPercentage = (double)successAmount / (double)totalRequestsAmount,
                     MinResponseTime = minResponseTime,
                     MaxResponseTime = maxResponseTime,
+                    AvgResponseTime = avgResponseTime,
 
                     PagedResults = new PagedResults
                     {
