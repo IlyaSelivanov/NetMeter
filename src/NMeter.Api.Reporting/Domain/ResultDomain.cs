@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using NMeter.Api.Reporting.Data;
 using NMeter.Api.Reporting.Models;
@@ -26,19 +27,19 @@ namespace NMeter.Api.Reporting.Domain
             _resultRepository = resultRepository;
             _configuration = configuration;
             _hashProvider = hashProvider;
+
+            if (!int.TryParse(_configuration["ResultsPerPage"], out _resultsPerPage))
+                _resultsPerPage = 100;
         }
 
         public async Task<ExecutionResult> GetExecutionResult(int executionId, RequestSettings requestSettings)
         {
-            if (!int.TryParse(_configuration["ResultsPerPage"], out _resultsPerPage))
-                _resultsPerPage = 100;
+            var results = await GetData(executionId, requestSettings);
 
-            var results = await _resultRepository.GetExecutionResults(executionId);
-
-            var totalRequestsAmount = results.Count();
-            var successAmount = results.Where(r => r.ResponseCode.Equals(200)).Count();
-            var minResponseTime = results.MinBy(r => r.ResponseTime)?.ResponseTime ?? 0;
-            var maxResponseTime = results.MaxBy(r => r.ResponseTime)?.ResponseTime ?? 0;
+            var totalRequestsAmount = _resultRepository.GetExecutionResultsAmount(executionId);
+            var successAmount = _resultRepository.GetExecutionSuccessAmount(executionId);
+            var minResponseTime = _resultRepository.GetMinSuccessResponseTime(executionId);
+            var maxResponseTime = _resultRepository.GetMaxSuccessResponseTime(executionId);
 
             return new ExecutionResult
             {
@@ -53,10 +54,35 @@ namespace NMeter.Api.Reporting.Domain
                     PageIndex = requestSettings.PageIndex,
                     TotalPages = totalRequestsAmount / _resultsPerPage,
                     Results = results
-                        .Skip(requestSettings.PageIndex * _resultsPerPage)
-                        .Take(_resultsPerPage)
                 }
             };
+        }
+
+        private async Task<IEnumerable<Result>> GetData(int executionId, RequestSettings requestSettings)
+        {
+            var hash = _hashProvider.GenerateHash(new
+            {
+                ExecutionId = executionId,
+                RequestSettings = requestSettings
+            });
+
+            var cachedJson = await _cache.GetStringAsync(hash);
+
+            IEnumerable<Result> results;
+            if (cachedJson == null)
+            {
+                results = (await _resultRepository.GetExecutionResultsAsync(executionId))
+                    .Skip(requestSettings.PageIndex * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .ToList();
+
+                var jsonResults = JsonSerializer.Serialize(results);
+                await _cache.SetStringAsync(hash, jsonResults);
+            }
+            else
+                results = JsonSerializer.Deserialize<IEnumerable<Result>>(cachedJson) ?? new List<Result>();
+
+            return results;
         }
     }
 }

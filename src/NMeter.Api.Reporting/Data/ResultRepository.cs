@@ -12,13 +12,46 @@ namespace NMeter.Api.Reporting.Data
             _context = context;
         }
 
-        public async Task<IQueryable<Result>> GetExecutionResults(int executionId)
+        public int GetExecutionResultsAmount(int executionId)
+        {
+            return _context.Results
+                .Where(r => r.ExecutionId == executionId)
+                .Count();
+        }
+
+        public async Task<IQueryable<Result>> GetExecutionResultsAsync(int executionId)
         {
             var results = await _context.Results
                 .Where(r => r.ExecutionId == executionId)
                 .ToListAsync();
-                
+
             return results.AsQueryable();
+        }
+
+        public int GetExecutionSuccessAmount(int executionId)
+        {
+            return _context.Results
+                .Where(r => r.ExecutionId == executionId
+                    && r.ResponseCode == 200)
+                .Count();
+        }
+
+        public long GetMaxSuccessResponseTime(int executionId)
+        {
+            return _context.Results
+                .Where(r => r.ExecutionId == executionId
+                    && r.ResponseCode == 200)
+                .MaxBy(r => r.ResponseTime)
+                ?.ResponseTime ?? 0L;
+        }
+
+        public long GetMinSuccessResponseTime(int executionId)
+        {
+            return _context.Results
+                .Where(r => r.ExecutionId == executionId
+                    && r.ResponseCode == 200)
+                .MinBy(r => r.ResponseTime)
+                ?.ResponseTime ?? 0L;
         }
     }
 }
