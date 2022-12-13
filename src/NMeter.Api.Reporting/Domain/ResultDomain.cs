@@ -8,7 +8,7 @@ namespace NMeter.Api.Reporting.Domain
 {
     public class ResultDomain : IResultDomain
     {
-        private readonly Logger<ResultDomain> _logger;
+        private readonly ILogger<ResultDomain> _logger;
         private readonly IDistributedCache _cache;
         private readonly IResultRepository _resultRepository;
         private readonly IConfiguration _configuration;
@@ -16,7 +16,7 @@ namespace NMeter.Api.Reporting.Domain
         private int _resultsPerPage;
 
         public ResultDomain(
-            Logger<ResultDomain> logger,
+            ILogger<ResultDomain> logger,
             IDistributedCache cache,
             IResultRepository resultRepository,
             IConfiguration configuration,
@@ -34,28 +34,43 @@ namespace NMeter.Api.Reporting.Domain
 
         public async Task<ExecutionResult> GetExecutionResult(int executionId, RequestSettings requestSettings)
         {
-            var results = await GetData(executionId, requestSettings);
-
-            var totalRequestsAmount = _resultRepository.GetExecutionResultsAmount(executionId);
-            var successAmount = _resultRepository.GetExecutionSuccessAmount(executionId);
-            var minResponseTime = _resultRepository.GetMinSuccessResponseTime(executionId);
-            var maxResponseTime = _resultRepository.GetMaxSuccessResponseTime(executionId);
-
-            return new ExecutionResult
+            try
             {
-                TotalRequestsAmount = totalRequestsAmount,
-                SuccessAmount = successAmount,
-                SuccessPercentage = successAmount / totalRequestsAmount,
-                MinResponseTime = minResponseTime,
-                MaxResponseTime = maxResponseTime,
 
-                PagedResults = new PagedResults
+                var results = await GetData(executionId, requestSettings);
+
+                var totalRequestsAmount = _resultRepository.GetExecutionResultsAmount(executionId);
+                var successAmount = _resultRepository.GetExecutionSuccessAmount(executionId);
+                var minResponseTime = _resultRepository.GetMinSuccessResponseTime(executionId);
+                var maxResponseTime = _resultRepository.GetMaxSuccessResponseTime(executionId);
+
+                return new ExecutionResult
                 {
-                    PageIndex = requestSettings.PageIndex,
-                    TotalPages = totalRequestsAmount / _resultsPerPage,
-                    Results = results
-                }
-            };
+                    TotalRequestsAmount = totalRequestsAmount,
+                    SuccessAmount = successAmount,
+                    SuccessPercentage = successAmount / totalRequestsAmount,
+                    MinResponseTime = minResponseTime,
+                    MaxResponseTime = maxResponseTime,
+
+                    PagedResults = new PagedResults
+                    {
+                        PageIndex = requestSettings.PageIndex,
+                        TotalPages = totalRequestsAmount / _resultsPerPage,
+                        Results = results
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new ExecutionResult()
+                {
+                    PagedResults = new PagedResults()
+                    {
+                        Results = new List<Result>()
+                    }
+                };
+            }
         }
 
         private async Task<IEnumerable<Result>> GetData(int executionId, RequestSettings requestSettings)
@@ -71,7 +86,9 @@ namespace NMeter.Api.Reporting.Domain
             IEnumerable<Result> results;
             if (cachedJson == null)
             {
-                results = (await _resultRepository.GetExecutionResultsAsync(executionId))
+                results = await _resultRepository.GetExecutionResultsAsync(executionId);
+
+                results = results
                     .Skip(requestSettings.PageIndex * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .ToList();
@@ -79,6 +96,7 @@ namespace NMeter.Api.Reporting.Domain
                 var jsonResults = JsonSerializer.Serialize(results);
                 await _cache.SetStringAsync(hash, jsonResults);
             }
+
             else
                 results = JsonSerializer.Deserialize<IEnumerable<Result>>(cachedJson) ?? new List<Result>();
 

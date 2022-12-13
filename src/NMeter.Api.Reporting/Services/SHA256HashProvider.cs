@@ -7,10 +7,10 @@ namespace NMeter.Api.Reporting.Services
 {
     public class SHA256HashProvider : IHashProvider, IDisposable
     {
-        private readonly Logger<SHA256HashProvider> _logger;
+        private readonly ILogger<SHA256HashProvider> _logger;
         private readonly SHA256 _sha256;
 
-        public SHA256HashProvider(Logger<SHA256HashProvider> logger)
+        public SHA256HashProvider(ILogger<SHA256HashProvider> logger)
         {
             _logger = logger;
             _sha256 = SHA256.Create();

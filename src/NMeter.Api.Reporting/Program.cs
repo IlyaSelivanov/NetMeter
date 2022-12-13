@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using NMeter.Api.Reporting.Data;
+using NMeter.Api.Reporting.Domain;
 using NMeter.Api.Reporting.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddTransient<IResultRepository, ResultRepository>();
 builder.Services.AddTransient<IHashProvider, SHA256HashProvider>();
+builder.Services.AddTransient<IResultDomain, ResultDomain>();
 
 var app = builder.Build();
 
