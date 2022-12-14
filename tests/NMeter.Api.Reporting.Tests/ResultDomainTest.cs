@@ -22,7 +22,7 @@ public class ResultDomainTest
         serviceCollection.AddDbContext<AppDbContext>(options =>
         {
             // options.UseSqlServer("Server=localhost, 1433;Initial Catalog=NMeterDB;User ID=;Password=;TrustServerCertificate=True");
-            options.UseInMemoryDatabase("InMemoryDb");
+            options.UseInMemoryDatabase("ResultDomainTestDb");
         });
         serviceCollection.AddDistributedMemoryCache();
         // serviceCollection.AddStackExchangeRedisCache(options =>

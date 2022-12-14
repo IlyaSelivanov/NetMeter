@@ -36,7 +36,6 @@ namespace NMeter.Api.Reporting.Domain
         {
             try
             {
-
                 var results = await GetData(executionId, requestSettings);
 
                 var totalRequestsAmount = _resultRepository.GetExecutionResultsAmount(executionId);

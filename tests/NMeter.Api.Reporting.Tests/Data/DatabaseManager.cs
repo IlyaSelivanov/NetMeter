@@ -7,6 +7,9 @@ namespace NMeter.Api.Reporting.Tests.Data
     {
         public static void SeedData(AppDbContext context)
         {
+            if(context.Results.Any())
+                return;
+                
             context.Results.AddRange(
                 new Result
                 {
