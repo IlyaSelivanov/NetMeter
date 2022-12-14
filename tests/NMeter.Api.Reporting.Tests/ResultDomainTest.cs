@@ -6,7 +6,7 @@ using NMeter.Api.Reporting.Domain;
 using NMeter.Api.Reporting.Models;
 using NMeter.Api.Reporting.Services;
 
-namespace NMeter.App.Reporting.Tests;
+namespace NMeter.Api.Reporting.Tests;
 
 [TestClass]
 public class ResultDomainTest
