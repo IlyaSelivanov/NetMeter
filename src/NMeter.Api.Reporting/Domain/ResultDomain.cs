@@ -57,7 +57,7 @@ namespace NMeter.Api.Reporting.Domain
                     PagedResults = new PagedResults
                     {
                         PageIndex = requestSettings.PageIndex,
-                        TotalPages = totalRequestsAmount / _resultsPerPage,
+                        TotalPages = totalRequestsAmount / _resultsPerPage + 1,
                         Results = results
                     }
                 };

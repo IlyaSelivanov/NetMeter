@@ -5,6 +5,7 @@ using NMeter.Api.Reporting.Data;
 using NMeter.Api.Reporting.Domain;
 using NMeter.Api.Reporting.Models;
 using NMeter.Api.Reporting.Services;
+using NMeter.Api.Reporting.Tests.Data;
 
 namespace NMeter.Api.Reporting.Tests;
 
@@ -20,12 +21,13 @@ public class ResultDomainTest
 
         serviceCollection.AddDbContext<AppDbContext>(options =>
         {
-            options.UseSqlServer("Server=localhost, 1433;Initial Catalog=NMeterDB;User ID=;Password=;TrustServerCertificate=True");
-            // options.UseInMemoryDatabase("InMemoryDb");
+            // options.UseSqlServer("Server=localhost, 1433;Initial Catalog=NMeterDB;User ID=;Password=;TrustServerCertificate=True");
+            options.UseInMemoryDatabase("InMemoryDb");
         });
-        serviceCollection.AddStackExchangeRedisCache(options =>
-            options.Configuration = "localhost:6379"
-        );
+        serviceCollection.AddDistributedMemoryCache();
+        // serviceCollection.AddStackExchangeRedisCache(options =>
+        //     options.Configuration = "localhost:6379"
+        // );
         serviceCollection.AddTransient<IResultRepository, ResultRepository>();
         serviceCollection.AddTransient<IHashProvider, SHA256HashProvider>();
         serviceCollection.AddTransient<IResultDomain, ResultDomain>();
@@ -45,7 +47,10 @@ public class ResultDomainTest
     [TestMethod]
     public async Task GetExecutionResult_Positive_Test()
     {
+        var context = _serviceProvider.GetRequiredService<AppDbContext>();
         var resultDomain = _serviceProvider.GetRequiredService<IResultDomain>();
+
+        DatabaseManager.SeedData(context);
 
         var executeResult = await resultDomain.GetExecutionResult(1, 
         new RequestSettings
@@ -55,6 +60,33 @@ public class ResultDomainTest
             PageIndex = 0
         });
 
-        Assert.Fail();
+        Assert.AreEqual(3, executeResult.TotalRequestsAmount);
+        Assert.AreEqual(3, executeResult.PagedResults.Results.Count());
+        Assert.AreEqual(2, executeResult.SuccessAmount);
+        Assert.AreEqual(100L, executeResult.MinResponseTime);
+        Assert.AreEqual(200L, executeResult.MaxResponseTime);
+    }
+
+    [TestMethod]
+    public async Task GetExecutionResult_Empty_Results_Negative_Test()
+    {
+        var context = _serviceProvider.GetRequiredService<AppDbContext>();
+        var resultDomain = _serviceProvider.GetRequiredService<IResultDomain>();
+
+        DatabaseManager.SeedData(context);
+
+        var executeResult = await resultDomain.GetExecutionResult(2, 
+        new RequestSettings
+        {
+            FilterBy = "",
+            SortBy = "",
+            PageIndex = 0
+        });
+
+        Assert.AreEqual(0, executeResult.TotalRequestsAmount);
+        Assert.AreEqual(0, executeResult.PagedResults.Results.Count());
+        Assert.AreEqual(0, executeResult.SuccessAmount);
+        Assert.AreEqual(0L, executeResult.MinResponseTime);
+        Assert.AreEqual(0L, executeResult.MaxResponseTime);
     }
 }
