@@ -13,6 +13,9 @@ namespace NMeter.Api.Reporting.Extensions
             if (string.IsNullOrEmpty(propertyName))
                 return source;
 
+            if(filterValue == null)
+                return source;
+
             Type elementType = typeof(TSource);
 
             PropertyInfo? propertyInfo = elementType.GetProperties()
@@ -22,17 +25,23 @@ namespace NMeter.Api.Reporting.Extensions
             if (propertyInfo == null)
                 return source;
 
+            if(propertyInfo.PropertyType != filterValue.GetType())
+                return source;
+
             ParameterExpression parameterExpression = Expression.Parameter(elementType);
             Expression expression;
 
-            if (propertyInfo.PropertyType == typeof(int))
+            if (propertyInfo.PropertyType == typeof(Int32)
+                || propertyInfo.PropertyType == typeof(Int64)
+                || propertyInfo.PropertyType == typeof(Int16)
+                || propertyInfo.PropertyType == typeof(Int128))
             {
                 expression = Expression.Equal(
                     Expression.Property(
                         parameterExpression,
                         propertyInfo
                     ),
-                    Expression.Constant((int)filterValue)
+                    Expression.Constant(filterValue)
                 );
             }
             else if (propertyInfo.PropertyType == typeof(string))
