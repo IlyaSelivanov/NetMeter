@@ -56,7 +56,7 @@ public class ResultDomainTest
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, null!),
-                SortBy = string.Empty
+                SortBy = new SortBy(string.Empty, false)
             });
 
         Assert.AreEqual(3, executeResult.TotalRequestsAmount);
@@ -78,7 +78,7 @@ public class ResultDomainTest
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, null!),
-                SortBy = string.Empty
+                SortBy = new SortBy(string.Empty, false)
             });
 
         Assert.AreEqual(0, executeResult.TotalRequestsAmount);
@@ -100,7 +100,7 @@ public class ResultDomainTest
             new RequestSettings
             {
                 FilterBy = new FilterBy("ResponseCode", 500),
-                SortBy = string.Empty
+                SortBy = new SortBy(string.Empty, false)
             });
 
         Assert.AreEqual(3, executeResult.TotalRequestsAmount);

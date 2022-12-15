@@ -1,3 +1,4 @@
+using System.Text.Json;
 using NMeter.Api.Reporting.Extensions;
 
 namespace NMeter.Api.Reporting.Tests
@@ -11,7 +12,7 @@ namespace NMeter.Api.Reporting.Tests
         public void FilterBy_Integer_Equals_Positive_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -26,7 +27,7 @@ namespace NMeter.Api.Reporting.Tests
         public void FilterBy_Integer_Equals_Negative_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -41,7 +42,7 @@ namespace NMeter.Api.Reporting.Tests
         public void FilterBy_String_Contains_Positive_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -56,7 +57,7 @@ namespace NMeter.Api.Reporting.Tests
         public void FilterBy_String_Contains_Negative_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -78,11 +79,11 @@ namespace NMeter.Api.Reporting.Tests
             Assert.AreEqual(null, person);
         }
 
-         [TestMethod]
+        [TestMethod]
         public void FilterBy_Empty_Property_Name_Negative_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -97,7 +98,7 @@ namespace NMeter.Api.Reporting.Tests
         public void FilterBy_Filter_Value_Null_Negative_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -112,7 +113,7 @@ namespace NMeter.Api.Reporting.Tests
         public void FilterBy_No_Property_Negative_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -127,7 +128,7 @@ namespace NMeter.Api.Reporting.Tests
         public void FilterBy_Wrong_Value_Type_Negative_Test()
         {
             var persons = new List<Person>
-            { 
+            {
                 new Person("Tim Tayler", 30),
                 new Person("Al Pachino", 70)
             }
@@ -136,6 +137,56 @@ namespace NMeter.Api.Reporting.Tests
             var result = persons.FilterBy("age", 30L);
 
             Assert.AreEqual(2, result.Count());
+        }
+
+        [TestMethod]
+        public void Sort_By_String_Field_Asc_Positive_Test()
+        {
+            var persons = new List<Person>
+            {
+                new Person("Al Pachino", 70),
+                new Person("Tim Tayler", 30),
+                new Person("Aisec Azimov", 63)
+            }
+            .AsQueryable();
+
+            var result = persons.SortBy("Name");
+            var actual = JsonSerializer.Serialize<List<Person>>(result.ToList());
+            var expected = JsonSerializer.Serialize<List<Person>>(
+                new List<Person>
+                {
+                    new Person("Aisec Azimov", 63),
+                    new Person("Al Pachino", 70),
+                    new Person("Tim Tayler", 30),
+                }
+            );
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Sort_By_String_Field_Desc_Positive_Test()
+        {
+            var persons = new List<Person>
+            {
+                new Person("Al Pachino", 70),
+                new Person("Tim Tayler", 30),
+                new Person("Aisec Azimov", 63)
+            }
+            .AsQueryable();
+
+            var result = persons.SortBy("Name", true);
+            var actual = JsonSerializer.Serialize<List<Person>>(result.ToList());
+            var expected = JsonSerializer.Serialize<List<Person>>(
+                new List<Person>
+                {
+                    new Person("Tim Tayler", 30),
+                    new Person("Al Pachino", 70),
+                    new Person("Aisec Azimov", 63)                    
+                }
+            );
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }

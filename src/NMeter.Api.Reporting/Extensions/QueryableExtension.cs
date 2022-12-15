@@ -13,7 +13,7 @@ namespace NMeter.Api.Reporting.Extensions
             if (string.IsNullOrEmpty(propertyName))
                 return source;
 
-            if(filterValue == null)
+            if (filterValue == null)
                 return source;
 
             Type elementType = typeof(TSource);
@@ -25,7 +25,7 @@ namespace NMeter.Api.Reporting.Extensions
             if (propertyInfo == null)
                 return source;
 
-            if(propertyInfo.PropertyType != filterValue.GetType())
+            if (propertyInfo.PropertyType != filterValue.GetType())
                 return source;
 
             ParameterExpression parameterExpression = Expression.Parameter(elementType);
@@ -58,9 +58,27 @@ namespace NMeter.Api.Reporting.Extensions
             }
             else
                 return source;
-            
+
             Expression<Func<TSource, bool>> lambda = Expression.Lambda<Func<TSource, bool>>(expression, parameterExpression);
             return source.Where(lambda);
+        }
+
+        public static IQueryable<TSource> SortBy<TSource>(
+        this IQueryable<TSource> source,
+        string sortProperty,
+        bool desc = false)
+        {
+            if (string.IsNullOrEmpty(sortProperty))
+                return source;
+
+            PropertyInfo? propertyInfo = typeof(TSource).GetProperty(sortProperty);
+
+            if (propertyInfo == null)
+                return source;
+
+            return source
+                .OrderBy(p => !desc ? propertyInfo.GetValue(p, null) : null)
+                .ThenByDescending(p => desc ? propertyInfo.GetValue(p, null) : null);
         }
     }
 }
