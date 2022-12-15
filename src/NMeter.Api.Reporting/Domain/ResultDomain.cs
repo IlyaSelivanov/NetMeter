@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using NMeter.Api.Reporting.Data;
+using NMeter.Api.Reporting.Extensions;
 using NMeter.Api.Reporting.Models;
 using NMeter.Api.Reporting.Services;
 
@@ -36,7 +37,11 @@ namespace NMeter.Api.Reporting.Domain
         {
             try
             {
-                var results = await GetData(executionId, requestSettings);
+                var results = (await GetData(executionId, requestSettings))                
+                    .AsQueryable()
+                    .FilterBy(
+                        requestSettings.FilterBy.filterPtoperty, 
+                        requestSettings.FilterBy.filterValue);
 
                 var totalRequestsAmount = _resultRepository.GetExecutionResultsAmount(executionId);
                 var successAmount = _resultRepository.GetExecutionSuccessAmount(executionId);

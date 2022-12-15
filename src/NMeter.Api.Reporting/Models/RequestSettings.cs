@@ -1,8 +1,10 @@
 namespace NMeter.Api.Reporting.Models
 {
+    public record FilterBy(string filterPtoperty, object filterValue);
+
     public class RequestSettings
     {
-        public required string FilterBy { get; set; }
+        public required FilterBy FilterBy { get; set; }
         
         public required string SortBy { get; set; }
 

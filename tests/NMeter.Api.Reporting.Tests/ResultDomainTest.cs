@@ -53,12 +53,11 @@ public class ResultDomainTest
         DatabaseManager.SeedData(context);
 
         var executeResult = await resultDomain.GetExecutionResult(1, 
-        new RequestSettings
-        {
-            FilterBy = "",
-            SortBy = "",
-            PageIndex = 0
-        });
+            new RequestSettings
+            {
+                FilterBy = new FilterBy(string.Empty, null!),
+                SortBy = string.Empty
+            });
 
         Assert.AreEqual(3, executeResult.TotalRequestsAmount);
         Assert.AreEqual(3, executeResult.PagedResults.Results.Count());
@@ -76,17 +75,38 @@ public class ResultDomainTest
         DatabaseManager.SeedData(context);
 
         var executeResult = await resultDomain.GetExecutionResult(2, 
-        new RequestSettings
-        {
-            FilterBy = "",
-            SortBy = "",
-            PageIndex = 0
-        });
+            new RequestSettings
+            {
+                FilterBy = new FilterBy(string.Empty, null!),
+                SortBy = string.Empty
+            });
 
         Assert.AreEqual(0, executeResult.TotalRequestsAmount);
         Assert.AreEqual(0, executeResult.PagedResults.Results.Count());
         Assert.AreEqual(0, executeResult.SuccessAmount);
         Assert.AreEqual(0L, executeResult.MinResponseTime);
         Assert.AreEqual(0L, executeResult.MaxResponseTime);
+    }
+
+    [TestMethod]
+    public async Task GetExecutionResult_Filter_By_Response_Code_Positive_Test()
+    {
+        var context = _serviceProvider.GetRequiredService<AppDbContext>();
+        var resultDomain = _serviceProvider.GetRequiredService<IResultDomain>();
+
+        DatabaseManager.SeedData(context);
+
+        var executeResult = await resultDomain.GetExecutionResult(1, 
+            new RequestSettings
+            {
+                FilterBy = new FilterBy("ResponseCode", 500),
+                SortBy = string.Empty
+            });
+
+        Assert.AreEqual(3, executeResult.TotalRequestsAmount);
+        Assert.AreEqual(1, executeResult.PagedResults.Results.Count());
+        Assert.AreEqual(2, executeResult.SuccessAmount);
+        Assert.AreEqual(100L, executeResult.MinResponseTime);
+        Assert.AreEqual(200L, executeResult.MaxResponseTime);
     }
 }
