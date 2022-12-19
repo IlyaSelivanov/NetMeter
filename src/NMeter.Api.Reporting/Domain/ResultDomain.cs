@@ -41,7 +41,11 @@ namespace NMeter.Api.Reporting.Domain
                     .AsQueryable()
                     .FilterBy(
                         requestSettings.FilterBy.filterPtoperty, 
-                        requestSettings.FilterBy.filterValue);
+                        requestSettings.FilterBy.filterValue)
+                    .SortBy(
+                        requestSettings.SortBy.sortProperty,
+                        requestSettings.SortBy.desc
+                    );
 
                 var totalRequestsAmount = _resultRepository.GetExecutionResultsAmount(executionId);
                 var successAmount = _resultRepository.GetExecutionSuccessAmount(executionId);

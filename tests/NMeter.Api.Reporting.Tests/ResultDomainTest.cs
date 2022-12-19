@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,7 @@ public class ResultDomainTest
         serviceCollection.AddTransient<IHashProvider, SHA256HashProvider>();
         serviceCollection.AddTransient<IResultDomain, ResultDomain>();
         serviceCollection.AddLogging();
-        
+
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder
             .SetBasePath(Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName!)
@@ -52,7 +53,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(1, 
+        var executeResult = await resultDomain.GetExecutionResult(1,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, null!),
@@ -74,7 +75,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(2, 
+        var executeResult = await resultDomain.GetExecutionResult(2,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, null!),
@@ -96,7 +97,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(1, 
+        var executeResult = await resultDomain.GetExecutionResult(1,
             new RequestSettings
             {
                 FilterBy = new FilterBy("ResponseCode", 500),
@@ -108,5 +109,211 @@ public class ResultDomainTest
         Assert.AreEqual(2, executeResult.SuccessAmount);
         Assert.AreEqual(100L, executeResult.MinResponseTime);
         Assert.AreEqual(200L, executeResult.MaxResponseTime);
+    }
+
+    [TestMethod]
+    public async Task GetExecutionResult_Sort_By_Response_Code_Asc_Positive_Test()
+    {
+        var context = _serviceProvider.GetRequiredService<AppDbContext>();
+        var resultDomain = _serviceProvider.GetRequiredService<IResultDomain>();
+
+        DatabaseManager.SeedData(context);
+
+        var executeResult = await resultDomain.GetExecutionResult(3,
+            new RequestSettings
+            {
+                FilterBy = new FilterBy(string.Empty, 0),
+                SortBy = new SortBy("ResponseCode", false)
+            });
+        var actual = JsonSerializer.Serialize(executeResult.PagedResults.Results);
+        var expected = JsonSerializer.Serialize<List<Result>>(
+            new List<Result>
+            {
+                new Result
+                {
+                    Id = 5,
+                    ResponseCode = 200,
+                    ResponseBody = "A",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                },
+
+                new Result
+                {
+                    Id = 4,
+                    ResponseCode = 403,
+                    ResponseBody = "B",
+                    ResponseHeaders = "",
+                    ResponseTime = 100L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    Id = 6,
+                    ResponseCode = 500,
+                    ResponseBody = "C",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                }
+            }
+        );
+
+        Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public async Task GetExecutionResult_Sort_By_Response_Code_Desc_Positive_Test()
+    {
+        var context = _serviceProvider.GetRequiredService<AppDbContext>();
+        var resultDomain = _serviceProvider.GetRequiredService<IResultDomain>();
+
+        DatabaseManager.SeedData(context);
+
+        var executeResult = await resultDomain.GetExecutionResult(3,
+            new RequestSettings
+            {
+                FilterBy = new FilterBy(string.Empty, 0),
+                SortBy = new SortBy("ResponseCode", true)
+            });
+        var actual = JsonSerializer.Serialize(executeResult.PagedResults.Results);
+        var expected = JsonSerializer.Serialize<List<Result>>(
+            new List<Result>
+            {
+                new Result
+                {
+                    Id = 6,
+                    ResponseCode = 500,
+                    ResponseBody = "C",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    Id = 4,
+                    ResponseCode = 403,
+                    ResponseBody = "B",
+                    ResponseHeaders = "",
+                    ResponseTime = 100L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    Id = 5,
+                    ResponseCode = 200,
+                    ResponseBody = "A",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                }
+            }
+        );
+
+        Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public async Task GetExecutionResult_Sort_By_Response_Body_Asc_Positive_Test()
+    {
+        var context = _serviceProvider.GetRequiredService<AppDbContext>();
+        var resultDomain = _serviceProvider.GetRequiredService<IResultDomain>();
+
+        DatabaseManager.SeedData(context);
+
+        var executeResult = await resultDomain.GetExecutionResult(3,
+            new RequestSettings
+            {
+                FilterBy = new FilterBy(string.Empty, 0),
+                SortBy = new SortBy("ResponseBody", false)
+            });
+        var actual = JsonSerializer.Serialize(executeResult.PagedResults.Results);
+        var expected = JsonSerializer.Serialize<List<Result>>(
+            new List<Result>
+            {
+                new Result
+                {
+                    Id = 5,
+                    ResponseCode = 200,
+                    ResponseBody = "A",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                },
+
+                new Result
+                {
+                    Id = 4,
+                    ResponseCode = 403,
+                    ResponseBody = "B",
+                    ResponseHeaders = "",
+                    ResponseTime = 100L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    Id = 6,
+                    ResponseCode = 500,
+                    ResponseBody = "C",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                }
+            }
+        );
+
+        Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public async Task GetExecutionResult_Sort_By_Response_Body_Desc_Positive_Test()
+    {
+        var context = _serviceProvider.GetRequiredService<AppDbContext>();
+        var resultDomain = _serviceProvider.GetRequiredService<IResultDomain>();
+
+        DatabaseManager.SeedData(context);
+
+        var executeResult = await resultDomain.GetExecutionResult(3,
+            new RequestSettings
+            {
+                FilterBy = new FilterBy(string.Empty, 0),
+                SortBy = new SortBy("ResponseBody", true)
+            });
+        var actual = JsonSerializer.Serialize(executeResult.PagedResults.Results);
+        var expected = JsonSerializer.Serialize<List<Result>>(
+            new List<Result>
+            {
+                new Result
+                {
+                    Id = 6,
+                    ResponseCode = 500,
+                    ResponseBody = "C",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    Id = 4,
+                    ResponseCode = 403,
+                    ResponseBody = "B",
+                    ResponseHeaders = "",
+                    ResponseTime = 100L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    Id = 5,
+                    ResponseCode = 200,
+                    ResponseBody = "A",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                }
+            }
+        );
+
+        Assert.AreEqual(expected, actual);
     }
 }

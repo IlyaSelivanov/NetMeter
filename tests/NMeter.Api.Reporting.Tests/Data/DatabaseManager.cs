@@ -11,6 +11,7 @@ namespace NMeter.Api.Reporting.Tests.Data
                 return;
                 
             context.Results.AddRange(
+                //ExecutionId == 1
                 new Result
                 {
                     ResponseCode = 200,
@@ -34,6 +35,31 @@ namespace NMeter.Api.Reporting.Tests.Data
                     ResponseHeaders = "",
                     ResponseTime = 200L,
                     ExecutionId = 1
+                },
+                //ExecutionId == 3
+                new Result
+                {
+                    ResponseCode = 403,
+                    ResponseBody = "B",
+                    ResponseHeaders = "",
+                    ResponseTime = 100L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    ResponseCode = 200,
+                    ResponseBody = "A",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
+                },
+                new Result
+                {
+                    ResponseCode = 500,
+                    ResponseBody = "C",
+                    ResponseHeaders = "",
+                    ResponseTime = 200L,
+                    ExecutionId = 3
                 }
             );
 

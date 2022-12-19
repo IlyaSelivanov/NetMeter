@@ -144,9 +144,10 @@ namespace NMeter.Api.Reporting.Tests
         {
             var persons = new List<Person>
             {
+                new Person("Anton Chigurh", 41),
                 new Person("Al Pachino", 70),
                 new Person("Tim Tayler", 30),
-                new Person("Aisec Azimov", 63)
+                new Person("Iaac Azimov", 63)
             }
             .AsQueryable();
 
@@ -155,8 +156,9 @@ namespace NMeter.Api.Reporting.Tests
             var expected = JsonSerializer.Serialize<List<Person>>(
                 new List<Person>
                 {
-                    new Person("Aisec Azimov", 63),
                     new Person("Al Pachino", 70),
+                    new Person("Anton Chigurh", 41),
+                    new Person("Iaac Azimov", 63),
                     new Person("Tim Tayler", 30),
                 }
             );
@@ -169,9 +171,10 @@ namespace NMeter.Api.Reporting.Tests
         {
             var persons = new List<Person>
             {
+                new Person("Anton Chigurh", 41),
                 new Person("Al Pachino", 70),
                 new Person("Tim Tayler", 30),
-                new Person("Aisec Azimov", 63)
+                new Person("Iaac Azimov", 63)
             }
             .AsQueryable();
 
@@ -181,8 +184,63 @@ namespace NMeter.Api.Reporting.Tests
                 new List<Person>
                 {
                     new Person("Tim Tayler", 30),
+                    new Person("Iaac Azimov", 63),
+                    new Person("Anton Chigurh", 41),
                     new Person("Al Pachino", 70),
-                    new Person("Aisec Azimov", 63)                    
+                }
+            );
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Sort_By_Int_Field_Asc_Positive_Test()
+        {
+            var persons = new List<Person>
+            {
+                new Person("Anton Chigurh", 41),
+                new Person("Al Pachino", 70),
+                new Person("Tim Tayler", 30),
+                new Person("Iaac Azimov", 63)
+            }
+            .AsQueryable();
+
+            var result = persons.SortBy("Age");
+            var actual = JsonSerializer.Serialize<List<Person>>(result.ToList());
+            var expected = JsonSerializer.Serialize<List<Person>>(
+                new List<Person>
+                {
+                    new Person("Tim Tayler", 30),
+                    new Person("Anton Chigurh", 41),
+                    new Person("Iaac Azimov", 63),
+                    new Person("Al Pachino", 70),
+                }
+            );
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Sort_By_Int_Field_Desc_Positive_Test()
+        {
+            var persons = new List<Person>
+            {
+                new Person("Anton Chigurh", 41),
+                new Person("Al Pachino", 70),
+                new Person("Tim Tayler", 30),
+                new Person("Iaac Azimov", 63)
+            }
+            .AsQueryable();
+
+            var result = persons.SortBy("Age", true);
+            var actual = JsonSerializer.Serialize<List<Person>>(result.ToList());
+            var expected = JsonSerializer.Serialize<List<Person>>(
+                new List<Person>
+                {
+                    new Person("Al Pachino", 70),
+                    new Person("Iaac Azimov", 63),
+                    new Person("Anton Chigurh", 41),
+                    new Person("Tim Tayler", 30),
                 }
             );
 
