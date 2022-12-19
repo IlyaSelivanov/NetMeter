@@ -53,7 +53,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(1,
+        var executeResult = await resultDomain.GetExecutionAggregatedResult(1,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, null!),
@@ -75,7 +75,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(2,
+        var executeResult = await resultDomain.GetExecutionAggregatedResult(2,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, null!),
@@ -97,7 +97,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(1,
+        var executeResult = await resultDomain.GetExecutionAggregatedResult(1,
             new RequestSettings
             {
                 FilterBy = new FilterBy("ResponseCode", 500),
@@ -119,7 +119,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(3,
+        var executeResult = await resultDomain.GetExecutionAggregatedResult(3,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, 0),
@@ -171,7 +171,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(3,
+        var executeResult = await resultDomain.GetExecutionAggregatedResult(3,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, 0),
@@ -222,7 +222,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(3,
+        var executeResult = await resultDomain.GetExecutionAggregatedResult(3,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, 0),
@@ -274,7 +274,7 @@ public class ResultDomainTest
 
         DatabaseManager.SeedData(context);
 
-        var executeResult = await resultDomain.GetExecutionResult(3,
+        var executeResult = await resultDomain.GetExecutionAggregatedResult(3,
             new RequestSettings
             {
                 FilterBy = new FilterBy(string.Empty, 0),

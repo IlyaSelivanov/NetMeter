@@ -4,6 +4,6 @@ namespace NMeter.Api.Reporting.Domain
 {
     public interface IResultDomain
     {
-        Task<ExecutionResult> GetExecutionResult(int executionId, RequestSettings requestSettings);
+        Task<ExecutionResult> GetExecutionAggregatedResult(int executionId, RequestSettings requestSettings);
     }
 }

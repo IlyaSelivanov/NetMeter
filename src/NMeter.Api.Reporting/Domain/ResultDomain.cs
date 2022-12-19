@@ -33,7 +33,7 @@ namespace NMeter.Api.Reporting.Domain
                 _resultsPerPage = 100;
         }
 
-        public async Task<ExecutionResult> GetExecutionResult(int executionId, RequestSettings requestSettings)
+        public async Task<ExecutionResult> GetExecutionAggregatedResult(int executionId, RequestSettings requestSettings)
         {
             try
             {
